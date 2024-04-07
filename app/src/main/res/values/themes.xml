@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">>
+
+    <style name="Theme.HeartStitcher" parent="Theme.MaterialComponents.DayNight.NoActionBar" />
+
+    <style name="Theme.HeartStitcher.NoActionBar">
+        <item name="windowActionBar">true</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.HeartStitcher.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.HeartStitcher.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+</resources>

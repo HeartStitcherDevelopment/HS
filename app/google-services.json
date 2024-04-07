@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "29374360110",
+    "project_id": "heartstitcher-b8876",
+    "storage_bucket": "heartstitcher-b8876.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:29374360110:android:1be26749979b9e4716cdbf",
+        "android_client_info": {
+          "package_name": "com.wtfih.heartstitcher"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1GPRAnCR7d68HvF5oF-DuAhz2Ni-WvE8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
