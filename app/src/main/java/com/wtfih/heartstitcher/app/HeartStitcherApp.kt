@@ -8,10 +8,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.wtfih.heartstitcher.navigation.HeartStitcherRouter
 import com.wtfih.heartstitcher.navigation.Screen
+import com.wtfih.heartstitcher.screens.AchievementsScreen
+import com.wtfih.heartstitcher.screens.CheerUpScreen
 import com.wtfih.heartstitcher.screens.HomeScreen
 import com.wtfih.heartstitcher.screens.LoginScreen
+import com.wtfih.heartstitcher.screens.NotepadScreen
+import com.wtfih.heartstitcher.screens.NutritionScreen
+import com.wtfih.heartstitcher.screens.PanicScreen
+import com.wtfih.heartstitcher.screens.SettingsScreen
 import com.wtfih.heartstitcher.screens.SignUpScreen
+import com.wtfih.heartstitcher.screens.SleepScreen
 import com.wtfih.heartstitcher.screens.TermsAndConditionsScreen
+import com.wtfih.heartstitcher.screens.WheelScreen
 
 
 @Composable
@@ -32,6 +40,30 @@ fun HeartSitcherApp(){
                 }
                 is Screen.HomeScreen ->{
                     HomeScreen()
+                }
+                is Screen.PanicScreen ->{
+                    PanicScreen()
+                }
+                is Screen.WheelScreen ->{
+                    WheelScreen()
+                }
+                is Screen.AchievementsScreen ->{
+                    AchievementsScreen()
+                }
+                is Screen.CheerUpScreen ->{
+                    CheerUpScreen()
+                }
+                is Screen.NotepadScreen ->{
+                    NotepadScreen()
+                }
+                is Screen.NutritionScreen ->{
+                    NutritionScreen()
+                }
+                is Screen.SettingsScreen ->{
+                    SettingsScreen()
+                }
+                is Screen.SleepScreen ->{
+                    SleepScreen()
                 }
             }
         }

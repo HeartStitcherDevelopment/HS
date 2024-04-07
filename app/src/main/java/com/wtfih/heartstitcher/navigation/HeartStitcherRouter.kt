@@ -9,6 +9,14 @@ sealed class Screen {
     object TermsAndConditionsScreen : Screen()
     object LoginScreen : Screen()
     object HomeScreen : Screen()
+    object PanicScreen : Screen()
+    object WheelScreen : Screen()
+    object AchievementsScreen : Screen()
+    object CheerUpScreen : Screen()
+    object NotepadScreen : Screen()
+    object NutritionScreen : Screen()
+    object SettingsScreen : Screen()
+    object SleepScreen :  Screen()
 }
 
 object HeartStitcherRouter {

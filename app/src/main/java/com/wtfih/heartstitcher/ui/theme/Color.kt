@@ -17,3 +17,7 @@ val AccentColor = Color(0xFFC58BF2)
 val GrayColor = Color(0xFF7B6F72)
 val WhiteColor = Color(0xFFFFFFFF)
 val BGColor = Color(0xFFF7F8F8)
+val PanicColor1 = Color(0xFFA30000)
+val Purple = Color(0xFF6A1B9A)
+val Blue = Color(0xFF64B5F6)
+

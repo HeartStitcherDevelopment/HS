@@ -4,12 +4,18 @@ package com.wtfih.heartstitcher.components
 
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
@@ -52,15 +58,19 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.wtfih.heartstitcher.R
 import com.wtfih.heartstitcher.ui.theme.BGColor
 import com.wtfih.heartstitcher.ui.theme.GrayColor
+import com.wtfih.heartstitcher.ui.theme.PanicColor1
 import com.wtfih.heartstitcher.ui.theme.Primary
 import com.wtfih.heartstitcher.ui.theme.Secondary
 import com.wtfih.heartstitcher.ui.theme.TextColor
 import com.wtfih.heartstitcher.ui.theme.componentShapes
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.unit.sp
 
 
 @Composable
@@ -193,8 +203,8 @@ fun PasswordTextField(labelValue: String, icon: ImageVector,
 fun CheckboxComponent(value: String,onTextSelected:(String)->Unit, onCheckedChange : (Boolean) -> Unit){
     Row(
         modifier = Modifier
-        .fillMaxWidth()
-        .heightIn(56.dp),
+            .fillMaxWidth()
+            .heightIn(56.dp),
         verticalAlignment = Alignment.CenterVertically
         )
     {
@@ -218,12 +228,12 @@ fun ClickableTextComponent(value: String, onTextSelected: (String) -> Unit){
     val termsAndConditionText = "Terms of Use"
     val annotatedString = buildAnnotatedString {
         append(initialText)
-        withStyle(style = SpanStyle(color = Primary)){
+        withStyle(style = SpanStyle(color = colorResource(id = R.color.colorWhite))){
             pushStringAnnotation(tag = privacyPolicyText, annotation = privacyPolicyText)
             append(privacyPolicyText)
         }
         append(andText)
-        withStyle(style = SpanStyle(color = Primary)){
+        withStyle(style = SpanStyle(color = colorResource(id = R.color.colorWhite))){
             pushStringAnnotation(tag = termsAndConditionText, annotation = termsAndConditionText)
             append(termsAndConditionText)
         }
@@ -304,7 +314,7 @@ fun ClickableLoginTextComponent(tryingToLogin: Boolean = true, onTextSelected: (
 
     val annotatedString = buildAnnotatedString {
         append(initialText)
-        withStyle(style = SpanStyle(color = Primary)){
+        withStyle(style = SpanStyle(color = colorResource(id = R.color.colorWhite))){
             pushStringAnnotation(tag = loginText, annotation = loginText)
             append(loginText)
         }
@@ -343,8 +353,79 @@ fun UnderLinedTextComponent(value:String){
             fontWeight = FontWeight.Normal,
             fontStyle = FontStyle.Normal
         )
-        ,color = colorResource(id = R.color.colorGray),
+        ,color = colorResource(id = R.color.colorWhite),
         textAlign = TextAlign.Center,
         textDecoration = TextDecoration.Underline
     )
+}
+
+@Composable
+fun IconComponent(value: String, onIconClicked : () -> Unit, isEnabled: Boolean = true, painterResource: Painter){
+    androidx.compose.material3.
+    Button(modifier = Modifier
+        .heightIn(125.dp)
+        .widthIn(125.dp),
+        onClick ={
+            onIconClicked.invoke()
+        },
+        contentPadding =  PaddingValues(),
+        colors = ButtonDefaults.buttonColors(Color.Transparent),
+        shape = RoundedCornerShape(10.dp),
+        enabled = isEnabled,
+    ){
+        Box(modifier = Modifier
+            .heightIn(125.dp)
+            .widthIn(125.dp)
+            .background(
+                brush = Brush.horizontalGradient(listOf(Secondary, Primary)),
+                shape = RoundedCornerShape(10.dp)
+            ),
+            contentAlignment = Alignment.Center
+        ){
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Icon(painter = painterResource, contentDescription = "",modifier = Modifier.size(75.dp))
+                Spacer(modifier = Modifier.height(5.dp))
+                Text(
+                    text = value,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun PanicButtonComponent(onButtonClicked : () -> Unit, isEnabled: Boolean = true){
+    androidx.compose.material3.
+    Button(
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(82.dp),
+        onClick ={
+            onButtonClicked.invoke()
+        },
+        contentPadding = PaddingValues(),
+        colors = ButtonDefaults.buttonColors(Color.Transparent),
+        shape = RoundedCornerShape(50.dp),
+        enabled = isEnabled
+    ) {
+        Box(modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(82.dp)
+            .background(
+                brush = Brush.horizontalGradient(listOf(Color.Red, PanicColor1)),
+                shape = RoundedCornerShape(50.dp)
+            ),
+            contentAlignment = Alignment.Center
+        ){
+            Text(text = stringResource(id = R.string.PANIC),
+                fontSize = 30.sp,
+                fontWeight = FontWeight.Bold,
+                fontFamily = FontFamily.Monospace)
+
+        }
+    }
 }
