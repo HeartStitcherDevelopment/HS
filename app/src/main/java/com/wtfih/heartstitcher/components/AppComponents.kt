@@ -352,8 +352,8 @@ fun UnderLinedTextComponent(value:String){
             fontSize = 16.sp,
             fontWeight = FontWeight.Normal,
             fontStyle = FontStyle.Normal
-        )
-        ,color = colorResource(id = R.color.colorWhite),
+        ),
+        color = colorResource(id = R.color.colorWhite),
         textAlign = TextAlign.Center,
         textDecoration = TextDecoration.Underline
     )
