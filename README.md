@@ -1,4 +1,4 @@
 xd
 cos
 nicosc
-coscos
+cosco
