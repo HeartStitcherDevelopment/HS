@@ -19,7 +19,7 @@ import com.wtfih.heartstitcher.screens.SettingsScreen
 import com.wtfih.heartstitcher.screens.SignUpScreen
 import com.wtfih.heartstitcher.screens.SleepScreen
 import com.wtfih.heartstitcher.screens.TermsAndConditionsScreen
-import com.wtfih.heartstitcher.screens.WheelScreen
+import com.wtfih.heartstitcher.spin_wheel.WheelScreen
 
 
 @Composable
