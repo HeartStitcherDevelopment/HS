@@ -119,4 +119,8 @@
     <string name="nutrition">Nutrition</string>
     <string name="sleep">Sleep</string>
     <string name="PANIC">PANIC BUTTON</string>
+    <string name="center">Center</string>
+    <string name="spin">Spin!</string>
+    <string name="stop">STOP</string>
+    <string name="SPIN">SPIN!</string>
 </resources>

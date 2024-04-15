@@ -5,6 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuth.AuthStateListener
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.wtfih.heartstitcher.data.rules.Validator
 import com.wtfih.heartstitcher.navigation.HeartStitcherRouter
 import com.wtfih.heartstitcher.navigation.Screen
@@ -71,7 +73,9 @@ class SignUpViewModel : ViewModel() {
         printState()
         createUserInFirebase(
             email = registrationUIState.value.email,
-            password = registrationUIState.value.password
+            password = registrationUIState.value.password,
+            name = registrationUIState.value.firstName,
+            surname = registrationUIState.value.lastName
         )
     }
 
@@ -120,7 +124,7 @@ class SignUpViewModel : ViewModel() {
         Log.d(TAG,registrationUIState.value.toString())
     }
 
-    private fun createUserInFirebase(email:String,password:String){
+    private fun createUserInFirebase(email:String,password:String,name:String,surname:String){
 
         signUpInProgress.value = true
 
@@ -133,6 +137,20 @@ class SignUpViewModel : ViewModel() {
 
                 signUpInProgress.value = false
                 if(it.isSuccessful){
+                    val database = Firebase.firestore
+                    val user = hashMapOf(
+                        "first" to name,
+                        "last" to surname,
+                        "mail" to email
+                    )
+                    database.collection("users")
+                        .add(user)
+                        .addOnSuccessListener { documentReference ->
+                            Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                        }
+                        .addOnFailureListener { e ->
+                            Log.w(TAG, "Error adding document", e)
+                        }
                     HeartStitcherRouter.navigateTo(Screen.HomeScreen)
                 }
             }

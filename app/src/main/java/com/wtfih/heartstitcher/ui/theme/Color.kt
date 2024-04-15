@@ -21,3 +21,5 @@ val PanicColor1 = Color(0xFFA30000)
 val Purple = Color(0xFF6A1B9A)
 val Blue = Color(0xFF64B5F6)
 
+val SpinButtonColor1 = Color(0xFFFF5733) // A vibrant orange color for the spin button
+val SpinButtonColor2 = Color(0xFF4CAF50) // A lively green color for the wheel

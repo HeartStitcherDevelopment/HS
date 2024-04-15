@@ -15,11 +15,14 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.ButtonDefaults
@@ -32,6 +35,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -53,6 +57,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
@@ -65,6 +70,7 @@ import com.wtfih.heartstitcher.ui.theme.GrayColor
 import com.wtfih.heartstitcher.ui.theme.PanicColor1
 import com.wtfih.heartstitcher.ui.theme.Primary
 import com.wtfih.heartstitcher.ui.theme.Secondary
+import com.wtfih.heartstitcher.ui.theme.SpinButtonColor1
 import com.wtfih.heartstitcher.ui.theme.TextColor
 import com.wtfih.heartstitcher.ui.theme.componentShapes
 
@@ -139,6 +145,65 @@ fun TextField(labelValue: String, painterResource: Painter,
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun LargeTextField(onStringListChange: (List<String>) -> Unit,labelValue: String) {
+    val stringList = remember { mutableStateListOf<String>() }
+    val textFieldValue = remember { mutableStateOf(TextFieldValue()) }
+    Column {
+        OutlinedTextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(componentShapes.small),
+            label = { Text(text = labelValue) },
+            value = textFieldValue.value, // Access the value property of MutableState
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = Primary,
+                unfocusedBorderColor = Secondary,
+                focusedLabelColor = Primary,
+                cursorColor = Primary,
+                containerColor = BGColor
+            ),/*onImeActionPerformed = { action, _ ->
+                if (action == ImeAction.Done && textFieldValue.value.text.isNotBlank()) {
+                    stringList.add(textFieldValue.value.text)
+                    onStringListChange(stringList)
+                    textFieldValue.value = TextFieldValue()
+                }
+            },*/
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+            singleLine = false,
+            maxLines = 10,
+            onValueChange = {
+                textFieldValue.value = it
+            },
+            isError = false,
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        LazyColumn {
+            items(stringList) { string ->
+                Text(text = string)
+            }
+        }
+    }
+}
+@Composable
+fun StringItem(text: String, onRemove: (String) -> Unit) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(vertical = 4.dp)
+    ) {
+        Text(text = text, modifier = Modifier.weight(1f))
+        IconButton(onClick = { onRemove(text) }) {
+            Icon(
+                imageVector = Icons.Default.Close,
+                contentDescription = "Remove string"
+            )
+        }
+    }
+}
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PasswordTextField(labelValue: String, icon: ImageVector,
                       onTextSelected: (String) -> Unit,
@@ -249,7 +314,7 @@ fun ClickableTextComponent(value: String, onTextSelected: (String) -> Unit){
 }
 
 @Composable
-fun ButtonComponent(value: String, onButtonClicked : () -> Unit, isEnabled: Boolean = false){
+fun ButtonComponent(value: String, onButtonClicked : () -> Unit, isEnabled: Boolean = true){
     androidx.compose.material3.
     Button(
         modifier = Modifier
@@ -265,6 +330,37 @@ fun ButtonComponent(value: String, onButtonClicked : () -> Unit, isEnabled: Bool
     ) {
         Box(modifier = Modifier
             .fillMaxWidth()
+            .heightIn(48.dp)
+            .background(
+                brush = Brush.horizontalGradient(listOf(Secondary, Primary)),
+                shape = RoundedCornerShape(50.dp)
+            ),
+            contentAlignment = Alignment.Center
+        ){
+            Text(text = value,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold)
+        }
+    }
+}
+
+@Composable
+fun SmallButtonComponent(width: Int = 64,value: String, onButtonClicked : () -> Unit, isEnabled: Boolean = true){
+    androidx.compose.material3.
+    Button(
+        modifier = Modifier
+            .widthIn(width.dp)
+            .heightIn(48.dp),
+        onClick ={
+            onButtonClicked.invoke()
+        },
+        contentPadding = PaddingValues(),
+        colors = ButtonDefaults.buttonColors(Color.Transparent),
+        shape = RoundedCornerShape(50.dp),
+        enabled = isEnabled
+    ) {
+        Box(modifier = Modifier
+            .widthIn(width.dp)
             .heightIn(48.dp)
             .background(
                 brush = Brush.horizontalGradient(listOf(Secondary, Primary)),
@@ -427,5 +523,71 @@ fun PanicButtonComponent(onButtonClicked : () -> Unit, isEnabled: Boolean = true
     }
 }
 
+
+@Composable
+fun SpinButtonComponent(onButtonClicked : () -> Unit, isEnabled: Boolean = true){
+    androidx.compose.material3.
+    Button(
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(82.dp),
+        onClick ={
+            onButtonClicked.invoke()
+        },
+        contentPadding = PaddingValues(),
+        colors = ButtonDefaults.buttonColors(Color.Transparent),
+        shape = RoundedCornerShape(50.dp),
+        enabled = isEnabled
+    ) {
+        Box(modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(82.dp)
+            .background(
+                brush = Brush.horizontalGradient(listOf(SpinButtonColor1, Color.Red)),
+                shape = RoundedCornerShape(50.dp)
+            ),
+            contentAlignment = Alignment.Center
+        ){
+            Text(text = stringResource(id = R.string.SPIN),
+                fontSize = 30.sp,
+                fontWeight = FontWeight.Bold,
+                fontFamily = FontFamily.Monospace)
+
+        }
+    }
+}
+/*fun TextField(labelValue: String, painterResource: Painter,
+              onTextSelected: (String) -> Unit,
+              errorStatus:Boolean = false
+) {
+    val textValue = remember {
+        mutableStateOf("")
+    }
+    OutlinedTextField(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(componentShapes.small),
+        label = { Text(text = labelValue) },
+        value = textValue.value, // Access the value property of MutableState
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = Primary,
+            unfocusedBorderColor = Secondary,
+            focusedLabelColor = Primary,
+            cursorColor = Primary,
+            containerColor = BGColor
+        ),
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+        singleLine = true,
+        maxLines = 1,
+        onValueChange = {
+            textValue.value = it
+            onTextSelected(it)
+        },
+        leadingIcon = {
+            Icon(painter = painterResource, contentDescription ="" )
+        },
+        isError = !errorStatus
+    )
+}*/
 
 

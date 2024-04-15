@@ -1,14 +1,15 @@
-package com.wtfih.heartstitcher.spin_wheel
+package com.wtfih.heartstitcher.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,10 +27,15 @@ import androidx.compose.ui.unit.sp
 import com.chargemap.compose.numberpicker.NumberPicker
 import com.wtfih.heartstitcher.R
 import com.wtfih.heartstitcher.components.HeadingTextComponent
+import com.wtfih.heartstitcher.components.LargeTextField
+import com.wtfih.heartstitcher.components.SpinButtonComponent
 import com.wtfih.heartstitcher.navigation.HeartStitcherRouter
 import com.wtfih.heartstitcher.navigation.Screen
 import com.wtfih.heartstitcher.navigation.SystemBackButtonHandler
 import com.wtfih.heartstitcher.spin_wheel.ExampleUnitTest.toColor
+import com.wtfih.heartstitcher.spin_wheel.SpinWheelComponent
+import com.wtfih.heartstitcher.spin_wheel.SpinWheelItem
+import com.wtfih.heartstitcher.spin_wheel.rememberSpinWheelState
 import com.wtfih.heartstitcher.ui.theme.Blue
 import com.wtfih.heartstitcher.ui.theme.Purple
 import kotlinx.collections.immutable.toPersistentList
@@ -89,46 +95,49 @@ fun WheelScreen() {
             .background(brush = Brush.horizontalGradient(listOf(Purple, Blue)))
             .padding(28.dp)
         ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            HeadingTextComponent(value = stringResource(id = R.string.wheel))
-            
-            Spacer(modifier = Modifier.height(50.dp))
-
-            Box(modifier = Modifier.size(300.dp)) {
-                SpinWheelComponent(spinState)
-            }
-            Spacer(modifier = Modifier.size(40.dp))
-            Button(onClick = {
-                spinState.goto(pickerValue)
-            }) {
-                Text(text = "Goto")
-            }
-            Spacer(modifier = Modifier.size(20.dp))
-            Button(onClick = {
-                spinState.launchInfinite()
-            }
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = "Infinite")
-            }
-            Spacer(modifier = Modifier.size(20.dp))
-            Button(onClick = {
-                spinState.stoppingWheel(pickerValue)
-            }) {
-                Text(text = "Stop")
-            }
-            Spacer(modifier = Modifier.size(20.dp))
 
-            NumberPicker(
-                value = pickerValue,
-                range = items.indices,
-                onValueChange = {
-                    pickerValue = it
-                }
-            )
+                    HeadingTextComponent(value = stringResource(id = R.string.wheel))
 
+                    Spacer(modifier = Modifier.height(50.dp))
+
+                    Column(modifier = Modifier.fillMaxWidth(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally){
+                    Box(modifier = Modifier.size(250.dp)) {
+                        SpinWheelComponent(spinState)
+                    }
+                    Spacer(modifier = Modifier.size(60.dp))
+                    /*SmallButtonComponent(
+                        value = stringResource(id = R.string.center),
+                        onButtonClicked = { spinState.goto(pickerValue) },
+                        isEnabled = true
+                    )
+                            Spacer(modifier = Modifier.width(30.dp))
+                    SmallButtonComponent(
+                        value = stringResource(id = R.string.spin),
+                        onButtonClicked = { spinState.launchInfinite() },
+                        isEnabled = true,
+                        width = 84
+                    )
+                            Spacer(modifier = Modifier.width(30.dp))*/
+                    SpinButtonComponent(
+                        onButtonClicked = { spinState.stoppingWheel(pickerValue) }
+                    )}
+
+                    Spacer(modifier = Modifier.size(10.dp))
+                    LargeTextField(onStringListChange = {}, labelValue = "")
+                NumberPicker(
+                    value = pickerValue,
+                    range = items.indices,
+                    onValueChange = {
+                        pickerValue = it
+                    }
+                )
 
             }
         }

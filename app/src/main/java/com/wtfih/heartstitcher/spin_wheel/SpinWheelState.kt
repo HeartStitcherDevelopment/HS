@@ -12,6 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import com.wtfih.heartstitcher.screens.getDegreeFromSection
+import com.wtfih.heartstitcher.screens.getDegreeFromSectionWithRandom
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -99,7 +101,7 @@ fun rememberSpinWheelState(
     @DrawableRes indicatorImage: Int,
     onSpinningFinished: (() -> Unit)?,
     initSpinWheelSection: Int? = 0, //if null then infinite
-    stopDuration: Duration = 8.seconds,
+    stopDuration: Duration = 10.seconds,
     stopNbTurn: Float = 3f,
     rotationPerSecond: Float = 0.8f,
     scope: CoroutineScope = rememberCoroutineScope(),
