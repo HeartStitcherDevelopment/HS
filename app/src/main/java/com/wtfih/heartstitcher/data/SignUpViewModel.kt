@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuth.AuthStateListener
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.wtfih.heartstitcher.data.rules.Validator
@@ -137,6 +138,7 @@ class SignUpViewModel : ViewModel() {
 
                 signUpInProgress.value = false
                 if(it.isSuccessful){
+                    val uid = Firebase.auth.currentUser!!.uid
                     val database = Firebase.firestore
                     val user = hashMapOf(
                         "first" to name,
@@ -144,13 +146,14 @@ class SignUpViewModel : ViewModel() {
                         "mail" to email
                     )
                     database.collection("users")
-                        .add(user)
-                        .addOnSuccessListener { documentReference ->
+                        .document(uid).set(user)
+                        /*.addOnSuccessListener { documentReference ->
                             Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
-                        }
-                        .addOnFailureListener { e ->
-                            Log.w(TAG, "Error adding document", e)
-                        }
+                            }
+                            .addOnFailureListener { e ->
+                                Log.w(TAG, "Error adding document", e)
+                            }*/
+
                     HeartStitcherRouter.navigateTo(Screen.HomeScreen)
                 }
             }
