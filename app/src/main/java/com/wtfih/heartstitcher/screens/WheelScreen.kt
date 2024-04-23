@@ -79,7 +79,7 @@ fun WheelScreen() {
 
                 }.toPersistentList()
             }
-            var pickerValue by remember { mutableIntStateOf(1) }
+            var pickerValue by remember { mutableIntStateOf(0) }
 
             val spinState = rememberSpinWheelState(
                 items = items,

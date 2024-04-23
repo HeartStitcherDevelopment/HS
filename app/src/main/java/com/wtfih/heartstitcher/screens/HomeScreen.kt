@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.wtfih.heartstitcher.R
+import com.wtfih.heartstitcher.components.CheerUpButtonComponent
 import com.wtfih.heartstitcher.components.HeadingTextComponent
 import com.wtfih.heartstitcher.components.IconComponent
 import com.wtfih.heartstitcher.components.PanicButtonComponent
@@ -89,11 +90,10 @@ fun HomeScreen(signUpViewModel: SignUpViewModel = SignUpViewModel()) {
                             painterResource(id = R.drawable.nutrition)
                         )
                         Spacer(modifier = Modifier.height(20.dp))
-                        IconComponent(
+                        CheerUpButtonComponent(
                             value = stringResource(id = R.string.cheer),
-                            onIconClicked = { HeartStitcherRouter.navigateTo(Screen.CheerUpScreen) },
                             isEnabled = true,
-                            painterResource(id = R.drawable.cheer)
+                            painterResource = painterResource(id = R.drawable.cheer)
                         )
                         Spacer(modifier = Modifier.height(20.dp))
                         IconComponent(

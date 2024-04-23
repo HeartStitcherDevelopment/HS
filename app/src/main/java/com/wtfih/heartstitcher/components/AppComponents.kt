@@ -25,6 +25,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Divider
@@ -35,9 +37,11 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -61,10 +65,13 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.wtfih.heartstitcher.R
+import com.wtfih.heartstitcher.data.CheerupsDataViewModel
 import com.wtfih.heartstitcher.ui.theme.BGColor
 import com.wtfih.heartstitcher.ui.theme.GrayColor
 import com.wtfih.heartstitcher.ui.theme.PanicColor1
@@ -556,6 +563,96 @@ fun SpinButtonComponent(onButtonClicked : () -> Unit, isEnabled: Boolean = true)
         }
     }
 }
+
+
+
+@Composable
+fun CheerUpButtonComponent(dataViewModel: CheerupsDataViewModel = viewModel(), value: String, isEnabled: Boolean = true, painterResource: Painter) {
+    var notificationText by remember { mutableStateOf("") }
+    var showDialog by remember { mutableStateOf(false) }
+    val cheerupsHashMap: HashMap<String, String> = dataViewModel.state.value
+    var randomString: String
+    if(cheerupsHashMap.isNotEmpty()) {
+        val randomKey = cheerupsHashMap.keys.random()
+        randomString = cheerupsHashMap[randomKey].toString()
+    }
+    else{
+        randomString = "placeholder"
+    }
+    Button(modifier = Modifier
+        .heightIn(125.dp)
+        .widthIn(125.dp),
+        onClick ={
+            notificationText = value
+            showDialog = true
+        },
+        contentPadding =  PaddingValues(),
+        colors = ButtonDefaults.buttonColors(Color.Transparent),
+        shape = RoundedCornerShape(10.dp),
+        enabled = isEnabled,
+    ){
+        Box(modifier = Modifier
+            .heightIn(125.dp)
+            .widthIn(125.dp)
+            .background(
+                brush = Brush.horizontalGradient(listOf(Secondary, Primary)),
+                shape = RoundedCornerShape(10.dp)
+            ),
+            contentAlignment = Alignment.Center
+        ){
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Icon(painter = painterResource, contentDescription = "",modifier = Modifier.size(75.dp))
+                Spacer(modifier = Modifier.height(5.dp))
+                Text(
+                    text = value,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+    }
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text(text = "Your thought of the day!", textAlign = TextAlign.Center) },
+            text = {
+                Text(text = randomString,
+                    fontSize = 20.sp,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .widthIn(40.dp)
+                        .padding(end = 8.dp),
+                    overflow = TextOverflow.Visible,
+                    softWrap = true,
+                    maxLines = Int.MAX_VALUE
+                    )
+            },
+            confirmButton = {
+                Button(modifier = Modifier.fillMaxWidth(),onClick = {
+                    showDialog = false
+                },contentPadding =  PaddingValues(),
+                    colors = ButtonDefaults.buttonColors(Color.Transparent),
+                    shape = RoundedCornerShape(10.dp),) {
+                    Box(modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(40.dp)
+                    .background(
+                        brush = Brush.horizontalGradient(listOf(Secondary, Primary)),
+                        shape = RoundedCornerShape(10.dp)
+                    ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("Thanks!")
+                }
+                }
+            }
+
+        )
+    }
+}
+
 /*fun TextField(labelValue: String, painterResource: Painter,
               onTextSelected: (String) -> Unit,
               errorStatus:Boolean = false
