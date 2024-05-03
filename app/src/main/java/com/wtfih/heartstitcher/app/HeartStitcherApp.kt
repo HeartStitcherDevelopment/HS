@@ -10,6 +10,7 @@ import com.wtfih.heartstitcher.navigation.HeartStitcherRouter
 import com.wtfih.heartstitcher.navigation.Screen
 import com.wtfih.heartstitcher.screens.AchievementsScreen
 import com.wtfih.heartstitcher.screens.HomeScreen
+import com.wtfih.heartstitcher.screens.LoadingScreen
 import com.wtfih.heartstitcher.screens.LoginScreen
 import com.wtfih.heartstitcher.screens.NotepadScreen
 import com.wtfih.heartstitcher.screens.NutritionScreen
@@ -17,7 +18,7 @@ import com.wtfih.heartstitcher.screens.PanicScreen
 import com.wtfih.heartstitcher.screens.SettingsScreen
 import com.wtfih.heartstitcher.screens.SignUpScreen
 import com.wtfih.heartstitcher.screens.SleepScreen
-import com.wtfih.heartstitcher.screens.SpinWheelDataScreen
+import com.wtfih.heartstitcher.screens.TaskScreen
 import com.wtfih.heartstitcher.screens.TermsAndConditionsScreen
 import com.wtfih.heartstitcher.screens.WheelScreen
 
@@ -62,8 +63,12 @@ fun HeartSitcherApp(){
                 is Screen.SleepScreen ->{
                     SleepScreen()
                 }
-                is Screen.SpinWheelDataScreen ->{
-                    SpinWheelDataScreen()
+                is Screen.TaskScreen ->{
+                    TaskScreen()
+                }
+                is Screen.LoadingScreen ->{
+                    LoadingScreen(loadingTimeMillis = 3000, onLoadingComplete =  {HeartStitcherRouter.navigateTo(Screen.TaskScreen)}) // Default loading time in milliseconds
+                     // Callback function to execute after loading)
                 }
             }
         }

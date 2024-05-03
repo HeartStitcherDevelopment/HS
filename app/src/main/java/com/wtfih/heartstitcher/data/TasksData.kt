@@ -19,7 +19,7 @@ class UserDataViewModel: ViewModel(){
     init{
         getData()
     }
-    private fun getData(){
+    fun getData(){
         viewModelScope.launch {
             state.value = getUserFromFireStore()
         }

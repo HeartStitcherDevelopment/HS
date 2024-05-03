@@ -16,7 +16,8 @@ sealed class Screen {
     object NutritionScreen : Screen()
     object SettingsScreen : Screen()
     object SleepScreen :  Screen()
-    object SpinWheelDataScreen : Screen()
+    object TaskScreen : Screen()
+    object LoadingScreen : Screen()
 }
 
 object HeartStitcherRouter {

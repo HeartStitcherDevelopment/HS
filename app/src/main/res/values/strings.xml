@@ -127,4 +127,6 @@
     <string name="wip">WORK IN PROGRESS</string>
     <string name="delete">DELETE</string>
     <string name="addtask">Add new task!</string>
+    <string name="task">List of Tasks</string>
+    <string name="loading">LOADING...</string>
 </resources>
