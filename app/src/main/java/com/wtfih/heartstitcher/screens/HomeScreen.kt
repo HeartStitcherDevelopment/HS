@@ -109,7 +109,7 @@ fun HomeScreen(signUpViewModel: SignUpViewModel = SignUpViewModel()) {
                     Column {
                         IconComponent(
                             value = stringResource(id = R.string.wheel),
-                            onIconClicked = { HeartStitcherRouter.navigateTo(Screen.WheelScreen) },
+                            onIconClicked = { HeartStitcherRouter.navigateTo(Screen.SpinWheelDataScreen) },
                             isEnabled = true,
                             painterResource(id = R.drawable.wheel)
                         )

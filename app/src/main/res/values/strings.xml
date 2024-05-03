@@ -124,4 +124,7 @@
     <string name="stop">STOP</string>
     <string name="SPIN">SPIN!</string>
     <string name="cheer_text">Your thought of today:</string>
+    <string name="wip">WORK IN PROGRESS</string>
+    <string name="delete">DELETE</string>
+    <string name="addtask">Add new task!</string>
 </resources>

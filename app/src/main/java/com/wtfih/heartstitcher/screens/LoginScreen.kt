@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,7 +27,7 @@ import com.wtfih.heartstitcher.components.DividerTextComponent
 import com.wtfih.heartstitcher.components.HeadingTextComponent
 import com.wtfih.heartstitcher.components.NormalTextComponent
 import com.wtfih.heartstitcher.components.PasswordTextField
-import com.wtfih.heartstitcher.components.TextField
+import com.wtfih.heartstitcher.components.TextFieldComponent
 import com.wtfih.heartstitcher.components.UnderLinedTextComponent
 import com.wtfih.heartstitcher.data.LogInUIEvent
 import com.wtfih.heartstitcher.data.LogInViewModel
@@ -59,7 +58,7 @@ fun LoginScreen(logInViewModel: LogInViewModel = viewModel()){
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                TextField(labelValue = stringResource(id = R.string.email),
+                TextFieldComponent(labelValue = stringResource(id = R.string.email),
                     painterResource(id = R.drawable.email),
                     onTextSelected = {
                         logInViewModel.onEvent(LogInUIEvent.EmailChanged(it))

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -35,6 +36,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -118,7 +120,7 @@ fun HeadingTextComponent(value:String){
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TextField(labelValue: String, painterResource: Painter,
+fun TextFieldComponent(labelValue: String, painterResource: Painter,
               onTextSelected: (String) -> Unit,
               errorStatus:Boolean = false
 ) {
@@ -153,6 +155,7 @@ fun TextField(labelValue: String, painterResource: Painter,
 }
 
 //@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LargeTextField(onStringListChange: (List<String>) -> Unit,labelValue: String) {
     val stringList = remember { mutableStateListOf<String>() }
@@ -376,7 +379,7 @@ fun SmallButtonComponent(width: Int = 64,value: String, onButtonClicked : () -> 
             contentAlignment = Alignment.Center
         ){
             Text(text = value,
-                fontSize = 18.sp,
+                fontSize = 13.sp,
                 fontWeight = FontWeight.Bold)
         }
     }
@@ -636,12 +639,12 @@ fun CheerUpButtonComponent(dataViewModel: CheerupsDataViewModel = viewModel(), v
                     colors = ButtonDefaults.buttonColors(Color.Transparent),
                     shape = RoundedCornerShape(10.dp),) {
                     Box(modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(40.dp)
-                    .background(
-                        brush = Brush.horizontalGradient(listOf(Secondary, Primary)),
-                        shape = RoundedCornerShape(10.dp)
-                    ),
+                        .fillMaxWidth()
+                        .heightIn(40.dp)
+                        .background(
+                            brush = Brush.horizontalGradient(listOf(Secondary, Primary)),
+                            shape = RoundedCornerShape(10.dp)
+                        ),
                     contentAlignment = Alignment.Center
                 ) {
                     Text("Thanks!")
@@ -653,38 +656,107 @@ fun CheerUpButtonComponent(dataViewModel: CheerupsDataViewModel = viewModel(), v
     }
 }
 
-/*fun TextField(labelValue: String, painterResource: Painter,
-              onTextSelected: (String) -> Unit,
-              errorStatus:Boolean = false
-) {
-    val textValue = remember {
-        mutableStateOf("")
-    }
-    OutlinedTextField(
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+////TESTING ZONE
+@Composable
+fun TaskComponent(item: String, onDeleteClicked: () -> Unit) {
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(componentShapes.small),
-        label = { Text(text = labelValue) },
-        value = textValue.value, // Access the value property of MutableState
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = Primary,
-            unfocusedBorderColor = Secondary,
-            focusedLabelColor = Primary,
-            cursorColor = Primary,
-            containerColor = BGColor
-        ),
-        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-        singleLine = true,
-        maxLines = 1,
-        onValueChange = {
-            textValue.value = it
-            onTextSelected(it)
-        },
-        leadingIcon = {
-            Icon(painter = painterResource, contentDescription ="" )
-        },
-        isError = !errorStatus
-    )
-}*/
+            .height(40.dp) // Adjust the height as needed
+            .background(
+                brush = Brush.horizontalGradient(
+                    colors = listOf(Color.Green, Color.Transparent),
+                    startX = 100f, // Adjust the starting point of the gradient
+                    endX = 650f // Adjust the ending point of the gradient
+                ),
+                shape = RoundedCornerShape(8.dp)
+            )
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = item,
+                fontSize = 25.sp,
+                textAlign = TextAlign.Left,
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(end = 8.dp),
+                overflow = TextOverflow.Visible,
+                softWrap = true
+            )
+            SmallButtonComponent(
+                value = stringResource(id = R.string.delete),
+                onButtonClicked = onDeleteClicked,
+            )
+        }
+    }
+}
+
+@Composable
+fun SpinText() {
+    val localFocusManager = LocalFocusManager.current
+    var textValue by remember { mutableStateOf("") }
+    val items = remember { mutableStateListOf<String>() }
+    Column(modifier = Modifier.fillMaxSize()) {
+        TextField(
+            value = textValue,
+            onValueChange = { textValue = it },
+            modifier = Modifier.fillMaxWidth(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text, imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions{
+                localFocusManager.clearFocus()
+            },
+            maxLines = 1
+        )
+        Spacer(modifier = Modifier.height(20.dp))
+        Button(
+            onClick = {
+                if (textValue.isNotBlank()) {
+                    items.add(textValue)
+                    textValue = ""
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(stringResource(id = R.string.addtask))
+        }
+        Spacer(modifier = Modifier.height(20.dp))
+        LazyColumnItems(items = items, onDeleteClicked = { item ->
+            items.remove(item)
+        })
+    }
+}
+
+@Composable
+fun LazyColumnItems(items: List<String>, onDeleteClicked: (String) -> Unit) {
+    LazyColumn {
+        items(items) { item ->
+            TaskComponent(item = item, onDeleteClicked = { onDeleteClicked(item) })
+            Spacer(modifier = Modifier.height(10.dp))
+        }
+    }
+}
+
+
+
 
 

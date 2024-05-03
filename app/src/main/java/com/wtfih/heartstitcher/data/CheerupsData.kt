@@ -20,13 +20,13 @@ class CheerupsDataViewModel:ViewModel(){
     }
     private fun getData(){
         viewModelScope.launch {
-            state.value = getDataFromFireStore()
+            state.value = getCheerupsFromFireStore()
         }
     }
 }
 
 
-suspend fun getDataFromFireStore():HashMap<String,String>{
+suspend fun getCheerupsFromFireStore():HashMap<String,String>{
     val database = FirebaseFirestore.getInstance()
     var hashmap = HashMap<String,String>()
     try{

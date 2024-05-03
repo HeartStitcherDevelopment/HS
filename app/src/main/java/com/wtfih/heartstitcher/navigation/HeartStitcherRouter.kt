@@ -12,11 +12,11 @@ sealed class Screen {
     object PanicScreen : Screen()
     object WheelScreen : Screen()
     object AchievementsScreen : Screen()
-    object CheerUpScreen : Screen()
     object NotepadScreen : Screen()
     object NutritionScreen : Screen()
     object SettingsScreen : Screen()
     object SleepScreen :  Screen()
+    object SpinWheelDataScreen : Screen()
 }
 
 object HeartStitcherRouter {

@@ -143,7 +143,8 @@ class SignUpViewModel : ViewModel() {
                     val user = hashMapOf(
                         "first" to name,
                         "last" to surname,
-                        "mail" to email
+                        "mail" to email,
+                        "tasks" to mutableListOf<String>()
                     )
                     database.collection("users")
                         .document(uid).set(user)
