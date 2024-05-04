@@ -24,11 +24,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.chargemap.compose.numberpicker.NumberPicker
 import com.wtfih.heartstitcher.R
 import com.wtfih.heartstitcher.components.HeadingTextComponent
 import com.wtfih.heartstitcher.components.LargeTextField
 import com.wtfih.heartstitcher.components.SpinButtonComponent
+import com.wtfih.heartstitcher.data.UserDataViewModel
 import com.wtfih.heartstitcher.navigation.HeartStitcherRouter
 import com.wtfih.heartstitcher.navigation.Screen
 import com.wtfih.heartstitcher.navigation.SystemBackButtonHandler
@@ -43,7 +45,7 @@ import kotlin.random.Random
 
 
 @Composable
-fun WheelScreen() {
+fun WheelScreen(dataViewModel: UserDataViewModel = viewModel()) {
             val colors1 = remember {
                 listOf(
                     "380048",
@@ -142,7 +144,7 @@ fun WheelScreen() {
             }
         }
         SystemBackButtonHandler {
-            HeartStitcherRouter.navigateTo(Screen.HomeScreen)
+            HeartStitcherRouter.navigateTo(Screen.TaskScreen)
         }
 }
 fun getDegreeFromSection(items: List<SpinWheelItem>, section: Int): Float {

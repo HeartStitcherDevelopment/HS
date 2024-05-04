@@ -8,11 +8,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.wtfih.heartstitcher.R
 import com.wtfih.heartstitcher.components.HeadingTextComponent
 import com.wtfih.heartstitcher.components.LazyColumnItems
@@ -25,38 +29,47 @@ import com.wtfih.heartstitcher.navigation.SystemBackButtonHandler
 import com.wtfih.heartstitcher.ui.theme.Blue
 import com.wtfih.heartstitcher.ui.theme.Purple
 
+
 @Composable
 fun TaskScreen(dataViewModel: UserDataViewModel = viewModel()) {
-    var tasks = (dataViewModel.state.value["tasks"] as? List<String>)?.toMutableList() ?: mutableListOf()
-    if(!taskFlag){
+    if(taskFlag){
+        dataViewModel.refresh()
+    }
+    val tasks = remember { dataViewModel.state.value["tasks"] as? MutableList<String> ?: mutableListOf() }
+    val db = Firebase.firestore
+    val id = Firebase.auth.currentUser!!.uid
+    if(!taskFlag) {
         taskFlag = true
         HeartStitcherRouter.navigateTo(Screen.LoadingScreen)
     }
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(brush = Brush.horizontalGradient(listOf(Purple, Blue)))
-            .padding(28.dp)
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
+    else{
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(brush = Brush.horizontalGradient(listOf(Purple, Blue)))
+                .padding(28.dp)
         ) {
-            HeadingTextComponent(value = stringResource(id = R.string.task))
-            Spacer(modifier = Modifier.height(30.dp))
+            Column(
+                modifier = Modifier.fillMaxSize(),
+            )
+            {
+                HeadingTextComponent(value = stringResource(id = R.string.task))
+                Spacer(modifier = Modifier.height(30.dp))
 
-            TaskText(tasks = tasks)
-            if (tasks.isNotEmpty()) {
-                LazyColumnItems(items = tasks, onDeleteClicked = { item ->
-                    tasks.remove(item)
-                })
+                TaskText(tasks = tasks)
+                if (tasks.isNotEmpty()) {
+                    LazyColumnItems(items = tasks, onDeleteClicked = { item ->
+                        (tasks).remove(item)
+                        val tasksList = tasks.map { it.toString() }
+                        db.collection("users").document(id).update("tasks", tasksList)
+                    })
+                }
             }
-        }
-        SystemBackButtonHandler {
-            HeartStitcherRouter.navigateTo(Screen.HomeScreen)
-        }
-    }
+            SystemBackButtonHandler {
+                HeartStitcherRouter.navigateTo(Screen.HomeScreen)
+            }
 
-    // No need to trigger task loading side effect here as it's done in the UserDataViewModel initialization
+    }}
 }
 
 /*

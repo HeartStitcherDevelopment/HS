@@ -30,7 +30,7 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun LoadingScreen(
-    loadingTimeMillis: Long = 3000, // Default loading time in milliseconds
+    loadingTimeMillis: Long = 1000, // Default loading time in milliseconds
     onLoadingComplete: () -> Unit // Callback function to execute after loading
 ) {
     var isLoading by remember { mutableStateOf(true) }

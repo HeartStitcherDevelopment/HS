@@ -72,8 +72,13 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.wtfih.heartstitcher.R
 import com.wtfih.heartstitcher.data.CheerupsDataViewModel
+import com.wtfih.heartstitcher.navigation.HeartStitcherRouter
+import com.wtfih.heartstitcher.navigation.Screen
 import com.wtfih.heartstitcher.ui.theme.BGColor
 import com.wtfih.heartstitcher.ui.theme.GrayColor
 import com.wtfih.heartstitcher.ui.theme.PanicColor1
@@ -647,7 +652,7 @@ fun CheerUpButtonComponent(dataViewModel: CheerupsDataViewModel = viewModel(), v
                         ),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("Thanks!")
+                    Text(stringResource(id = R.string.thanks))
                 }
                 }
             }
@@ -734,7 +739,11 @@ fun TaskComponent(item: String, onDeleteClicked: () -> Unit) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = item,
+                text = if (item.length > 15) {
+                    "${item.take(15)}..."
+                } else {
+                item
+            },
                 fontSize = 25.sp,
                 textAlign = TextAlign.Left,
                 modifier = Modifier
@@ -790,11 +799,12 @@ fun TaskText() {
 
 
 @Composable
-fun TaskText(tasks: List<String>) {
+fun TaskText(tasks: MutableList<String>) {
     val localFocusManager = LocalFocusManager.current
     var textValue by remember { mutableStateOf("") }
     val items = remember { mutableStateListOf<String>().apply { addAll(tasks) }  }
-
+    val db = Firebase.firestore
+    val id = Firebase.auth.currentUser!!.uid
 
     Column(modifier = Modifier.fillMaxSize()) {
         TextField(
@@ -808,10 +818,13 @@ fun TaskText(tasks: List<String>) {
             maxLines = 1
         )
         Spacer(modifier = Modifier.height(20.dp))
+
         Button(
             onClick = {
                 if (textValue.isNotBlank()) {
                     items.add(textValue)
+                    val tasksList = items.map { it.toString() }
+                    db.collection("users").document(id).update("tasks", tasksList)
                     textValue = ""
                 }
             },
@@ -819,14 +832,28 @@ fun TaskText(tasks: List<String>) {
         ) {
             Text(stringResource(id = R.string.addtask))
         }
+
         Spacer(modifier = Modifier.height(20.dp))
 
         LazyColumnItems(
             items = items,
             onDeleteClicked = { item ->
                 items.remove(item)
+                val tasksList = items.map { it.toString() }
+                db.collection("users").document(id).update("tasks", tasksList)
             }
         )
+        Spacer(modifier = Modifier.height(30.dp))
+
+        Button(
+            onClick = {
+                HeartStitcherRouter.navigateTo(Screen.WheelScreen)
+            },
+            modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)
+
+        ) {
+            Text(stringResource(id = R.string.choose))
+        }
     }
 }
 

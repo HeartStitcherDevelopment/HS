@@ -129,4 +129,6 @@
     <string name="addtask">Add new task!</string>
     <string name="task">List of Tasks</string>
     <string name="loading">LOADING...</string>
+    <string name="thanks">Thanks!</string>
+    <string name="choose">Help me choose...</string>
 </resources>
