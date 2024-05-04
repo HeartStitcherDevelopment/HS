@@ -2,5 +2,6 @@ package com.wtfih.heartstitcher.data
 
 object Globals {
     var taskFlag: Boolean = false
-    var Tasks = mutableListOf<String>()
+    var screenFlag: Boolean = true
+    var Tasks : MutableList<String> = mutableListOf()
 }

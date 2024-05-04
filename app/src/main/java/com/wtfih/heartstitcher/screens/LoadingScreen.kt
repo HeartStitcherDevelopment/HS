@@ -19,8 +19,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.wtfih.heartstitcher.R
 import com.wtfih.heartstitcher.components.HeadingTextComponent
+import com.wtfih.heartstitcher.data.UserDataViewModel
 import com.wtfih.heartstitcher.navigation.HeartStitcherRouter
 import com.wtfih.heartstitcher.navigation.Screen
 import com.wtfih.heartstitcher.navigation.SystemBackButtonHandler
@@ -30,15 +32,16 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun LoadingScreen(
-    loadingTimeMillis: Long = 1000, // Default loading time in milliseconds
-    onLoadingComplete: () -> Unit // Callback function to execute after loading
+    loadingTimeMillis: Long = 1000,
+    onLoadingComplete: () -> Unit,
+    dataViewModel: UserDataViewModel = viewModel()
 ) {
     var isLoading by remember { mutableStateOf(true) }
-
+    dataViewModel.refresh()
     LaunchedEffect(true) {
         delay(loadingTimeMillis)
         isLoading = false
-        onLoadingComplete() // Execute the given task after loading
+        onLoadingComplete()
     }
 
     if (isLoading) {
@@ -55,11 +58,9 @@ fun LoadingScreen(
             ) {
                 HeadingTextComponent(value = stringResource(id = R.string.loading))
                 Spacer(modifier = Modifier.height(50.dp))
-                // You can add additional loading components here
             }
         }
     } else {
-        // Once loading is complete, you can navigate to HomeScreen or perform other actions
         onLoadingComplete.invoke()
     }
     SystemBackButtonHandler {

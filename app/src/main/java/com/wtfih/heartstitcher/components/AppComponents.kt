@@ -77,6 +77,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.wtfih.heartstitcher.R
 import com.wtfih.heartstitcher.data.CheerupsDataViewModel
+import com.wtfih.heartstitcher.data.Globals
 import com.wtfih.heartstitcher.navigation.HeartStitcherRouter
 import com.wtfih.heartstitcher.navigation.Screen
 import com.wtfih.heartstitcher.ui.theme.BGColor
@@ -823,6 +824,7 @@ fun TaskText(tasks: MutableList<String>) {
             onClick = {
                 if (textValue.isNotBlank()) {
                     items.add(textValue)
+                    (Globals.Tasks).remove(textValue)
                     val tasksList = items.map { it.toString() }
                     db.collection("users").document(id).update("tasks", tasksList)
                     textValue = ""
@@ -839,6 +841,7 @@ fun TaskText(tasks: MutableList<String>) {
             items = items,
             onDeleteClicked = { item ->
                 items.remove(item)
+                (Globals.Tasks).remove(item)
                 val tasksList = items.map { it.toString() }
                 db.collection("users").document(id).update("tasks", tasksList)
             }

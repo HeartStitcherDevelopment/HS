@@ -18,6 +18,7 @@ sealed class Screen {
     object SleepScreen :  Screen()
     object TaskScreen : Screen()
     object LoadingScreen : Screen()
+
 }
 
 object HeartStitcherRouter {

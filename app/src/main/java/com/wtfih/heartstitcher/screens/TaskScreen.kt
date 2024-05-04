@@ -32,17 +32,15 @@ import com.wtfih.heartstitcher.ui.theme.Purple
 
 @Composable
 fun TaskScreen(dataViewModel: UserDataViewModel = viewModel()) {
-    if(taskFlag){
-        dataViewModel.refresh()
-    }
-    val tasks = remember { dataViewModel.state.value["tasks"] as? MutableList<String> ?: mutableListOf() }
+    val tasks =
+        remember { dataViewModel.state.value["tasks"] as? MutableList<String> ?: mutableListOf() }
     val db = Firebase.firestore
     val id = Firebase.auth.currentUser!!.uid
-    if(!taskFlag) {
+    if (!taskFlag) {
         taskFlag = true
         HeartStitcherRouter.navigateTo(Screen.LoadingScreen)
-    }
-    else{
+    } else {
+        taskFlag = false
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -68,8 +66,8 @@ fun TaskScreen(dataViewModel: UserDataViewModel = viewModel()) {
             SystemBackButtonHandler {
                 HeartStitcherRouter.navigateTo(Screen.HomeScreen)
             }
-
-    }}
+        }
+    }
 }
 
 /*
