@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
@@ -20,16 +19,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.chargemap.compose.numberpicker.NumberPicker
 import com.wtfih.heartstitcher.R
-import com.wtfih.heartstitcher.components.HeadingTextComponent
-import com.wtfih.heartstitcher.components.LargeTextField
 import com.wtfih.heartstitcher.components.SpinButtonComponent
+import com.wtfih.heartstitcher.data.Globals
 import com.wtfih.heartstitcher.data.UserDataViewModel
 import com.wtfih.heartstitcher.navigation.HeartStitcherRouter
 import com.wtfih.heartstitcher.navigation.Screen
@@ -46,6 +44,12 @@ import kotlin.random.Random
 
 @Composable
 fun WheelScreen(dataViewModel: UserDataViewModel = viewModel()) {
+        val tasks =
+        remember { dataViewModel.state.value["tasks"] as? MutableList<String> ?: mutableListOf() }
+    if (!Globals.taskFlag) {
+        Globals.taskFlag = true
+        HeartStitcherRouter.navigateTo(Screen.LoadingScreen2)}
+        else{
             val colors1 = remember {
                 listOf(
                     "380048",
@@ -55,7 +59,6 @@ fun WheelScreen(dataViewModel: UserDataViewModel = viewModel()) {
                     "730067"
                 ).map { it.toColor() }
             }
-
             val colors2 = remember {
                 listOf(
                     "F9A114",
@@ -65,23 +68,30 @@ fun WheelScreen(dataViewModel: UserDataViewModel = viewModel()) {
                     "EFC017"
                 ).map { it.toColor() }
             }
-
             val items = remember {
-                List(8) { index ->
+                List(tasks.size) { index ->
                     val colors = if (index % 2 == 0) colors1 else colors2
-
+                    val element = tasks.getOrNull(index) ?: ""
                     SpinWheelItem(
                         colors = colors.toPersistentList()
                     ) {
                         Text(
-                            text = "$$index",
-                            style = TextStyle(color = Color(0xFF4CAF50), fontSize = 20.sp)
+                            text = if (element.length >9) {
+                                "           ${element.take(9)}..."
+                            } else {
+                                "         $element"},
+                            modifier = Modifier
+                                .graphicsLayer {
+                                    rotationZ = 90f
+                                },
+                            style = TextStyle(color = Color(0xFFFFFFFF), fontSize = 20.sp),
+                            textAlign = TextAlign.End
                         )
                     }
 
                 }.toPersistentList()
             }
-            var pickerValue by remember { mutableIntStateOf(0) }
+            var current by remember { mutableIntStateOf(0) }
 
             val spinState = rememberSpinWheelState(
                 items = items,
@@ -90,7 +100,6 @@ fun WheelScreen(dataViewModel: UserDataViewModel = viewModel()) {
                 indicatorImage = R.drawable.spin_wheel_tick,
                 onSpinningFinished = null,
             )
-
         Box(
         modifier = Modifier
             .fillMaxSize()
@@ -102,51 +111,24 @@ fun WheelScreen(dataViewModel: UserDataViewModel = viewModel()) {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-
-                    HeadingTextComponent(value = stringResource(id = R.string.wheel))
-
-                    Spacer(modifier = Modifier.height(50.dp))
-
                     Column(modifier = Modifier.fillMaxWidth(),
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally){
-                    Box(modifier = Modifier.size(250.dp)) {
+                    Box(modifier = Modifier.size(400.dp)) {
                         SpinWheelComponent(spinState)
                     }
-                    Spacer(modifier = Modifier.size(60.dp))
-                    /*SmallButtonComponent(
-                        value = stringResource(id = R.string.center),
-                        onButtonClicked = { spinState.goto(pickerValue) },
-                        isEnabled = true
-                    )
-                            Spacer(modifier = Modifier.width(30.dp))
-                    SmallButtonComponent(
-                        value = stringResource(id = R.string.spin),
-                        onButtonClicked = { spinState.launchInfinite() },
-                        isEnabled = true,
-                        width = 84
-                    )
-                            Spacer(modifier = Modifier.width(30.dp))*/
-                    SpinButtonComponent(
-                        onButtonClicked = { spinState.stoppingWheel(pickerValue) }
+                        Spacer(modifier = Modifier.size(110.dp))
+                    SpinButtonComponent(result = tasks[current],
+                        onButtonClicked = {current = (0 until tasks.size).random();
+                            spinState.stoppingWheel(current)}
                     )}
-
-                    Spacer(modifier = Modifier.size(10.dp))
-                    LargeTextField(onStringListChange = {}, labelValue = "")
-                NumberPicker(
-                    value = pickerValue,
-                    range = items.indices,
-                    onValueChange = {
-                        pickerValue = it
-                    }
-                )
 
             }
         }
         SystemBackButtonHandler {
             HeartStitcherRouter.navigateTo(Screen.TaskScreen)
         }
-}
+}}
 fun getDegreeFromSection(items: List<SpinWheelItem>, section: Int): Float {
     val pieDegree = 360f / items.size
     return pieDegree * section.times(-1)

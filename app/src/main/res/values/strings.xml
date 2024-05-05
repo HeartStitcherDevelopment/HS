@@ -131,4 +131,7 @@
     <string name="loading">LOADING...</string>
     <string name="thanks">Thanks!</string>
     <string name="choose">Help me choose...</string>
+    <string name="stw">Spin the Wheel!</string>
+    <string name="ok">Okay!</string>
+    <string name="winner">The winner is:</string>
 </resources>

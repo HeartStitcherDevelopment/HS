@@ -67,8 +67,10 @@ fun HeartSitcherApp(){
                     TaskScreen()
                 }
                 is Screen.LoadingScreen ->{
-                    LoadingScreen(loadingTimeMillis = 3000, onLoadingComplete =  {HeartStitcherRouter.navigateTo(Screen.TaskScreen)}) // Default loading time in milliseconds
-                     // Callback function to execute after loading)
+                    LoadingScreen(loadingTimeMillis = 1000, onLoadingComplete =  {HeartStitcherRouter.navigateTo(Screen.TaskScreen)}) // Default loading time in milliseconds
+                }
+                is Screen.LoadingScreen2 ->{
+                    LoadingScreen(loadingTimeMillis = 1000, onLoadingComplete = {HeartStitcherRouter.navigateTo(Screen.WheelScreen)})
                 }
             }
         }

@@ -32,7 +32,7 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun LoadingScreen(
-    loadingTimeMillis: Long = 1000,
+    loadingTimeMillis: Long,
     onLoadingComplete: () -> Unit,
     dataViewModel: UserDataViewModel = viewModel()
 ) {

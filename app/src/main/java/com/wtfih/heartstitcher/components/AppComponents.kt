@@ -77,7 +77,6 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.wtfih.heartstitcher.R
 import com.wtfih.heartstitcher.data.CheerupsDataViewModel
-import com.wtfih.heartstitcher.data.Globals
 import com.wtfih.heartstitcher.navigation.HeartStitcherRouter
 import com.wtfih.heartstitcher.navigation.Screen
 import com.wtfih.heartstitcher.ui.theme.BGColor
@@ -88,6 +87,10 @@ import com.wtfih.heartstitcher.ui.theme.Secondary
 import com.wtfih.heartstitcher.ui.theme.SpinButtonColor1
 import com.wtfih.heartstitcher.ui.theme.TextColor
 import com.wtfih.heartstitcher.ui.theme.componentShapes
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -541,37 +544,87 @@ fun PanicButtonComponent(onButtonClicked : () -> Unit, isEnabled: Boolean = true
 
 
 @Composable
-fun SpinButtonComponent(onButtonClicked : () -> Unit, isEnabled: Boolean = true){
-    androidx.compose.material3.
+fun SpinButtonComponent(result: String, onButtonClicked: () -> Unit, isEnabled: Boolean = true) {
+    var showDialog by remember { mutableStateOf(false) }
+
     Button(
         modifier = Modifier
             .fillMaxWidth()
             .heightIn(82.dp),
-        onClick ={
+        onClick = {
             onButtonClicked.invoke()
+            CoroutineScope(Dispatchers.Main).launch {
+                delay(10500)
+                showDialog = true
+            }
         },
         contentPadding = PaddingValues(),
         colors = ButtonDefaults.buttonColors(Color.Transparent),
         shape = RoundedCornerShape(50.dp),
         enabled = isEnabled
     ) {
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .heightIn(82.dp)
-            .background(
-                brush = Brush.horizontalGradient(listOf(SpinButtonColor1, Color.Red)),
-                shape = RoundedCornerShape(50.dp)
-            ),
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(82.dp)
+                .background(
+                    brush = Brush.horizontalGradient(listOf(SpinButtonColor1, Color.Red)),
+                    shape = RoundedCornerShape(50.dp)
+                ),
             contentAlignment = Alignment.Center
-        ){
-            Text(text = stringResource(id = R.string.SPIN),
+        ) {
+            Text(
+                text = stringResource(id = R.string.SPIN),
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold,
-                fontFamily = FontFamily.Monospace)
-
+                fontFamily = FontFamily.Monospace
+            )
         }
     }
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text(text = stringResource(id = R.string.winner), textAlign = TextAlign.Center) },
+            text = {
+                Text(
+                    text = result,
+                    fontSize = 20.sp,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .widthIn(40.dp)
+                        .padding(end = 8.dp),
+                    overflow = TextOverflow.Visible,
+                    maxLines = Int.MAX_VALUE
+                )
+            },
+            confirmButton = {
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = {
+                        showDialog = false
+                    },
+                    contentPadding = PaddingValues(),
+                    colors = ButtonDefaults.buttonColors(Color.Transparent),
+                    shape = RoundedCornerShape(10.dp)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(40.dp)
+                            .background(
+                                brush = Brush.horizontalGradient(listOf(Secondary, Primary)),
+                                shape = RoundedCornerShape(10.dp)
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(stringResource(id = R.string.ok))
+                    }
+                }
+            }
+        )
+    }
 }
+
 
 
 
@@ -824,7 +877,7 @@ fun TaskText(tasks: MutableList<String>) {
             onClick = {
                 if (textValue.isNotBlank()) {
                     items.add(textValue)
-                    (Globals.Tasks).remove(textValue)
+                    (tasks).remove(textValue)
                     val tasksList = items.map { it.toString() }
                     db.collection("users").document(id).update("tasks", tasksList)
                     textValue = ""
@@ -834,29 +887,33 @@ fun TaskText(tasks: MutableList<String>) {
         ) {
             Text(stringResource(id = R.string.addtask))
         }
+        Spacer(modifier = Modifier.height(10.dp))
+        Button(
+            onClick = {
+                HeartStitcherRouter.navigateTo(Screen.WheelScreen)
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp)
 
-        Spacer(modifier = Modifier.height(20.dp))
+        ) {
+            Text(stringResource(id = R.string.stw))
+        }
+
+        Spacer(modifier = Modifier.height(10.dp))
 
         LazyColumnItems(
             items = items,
             onDeleteClicked = { item ->
                 items.remove(item)
-                (Globals.Tasks).remove(item)
+                (tasks).remove(item)
                 val tasksList = items.map { it.toString() }
                 db.collection("users").document(id).update("tasks", tasksList)
             }
         )
         Spacer(modifier = Modifier.height(30.dp))
 
-        Button(
-            onClick = {
-                HeartStitcherRouter.navigateTo(Screen.WheelScreen)
-            },
-            modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)
 
-        ) {
-            Text(stringResource(id = R.string.choose))
-        }
     }
 }
 
@@ -881,7 +938,22 @@ fun LazyColumnItems(items: List<String>, onDeleteClicked: (String) -> Unit) {
     }
 }
 
-
+@Composable
+fun AlertDialogComposable(
+    text: String,
+    onDismiss: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(text = text) },
+        confirmButton = {
+            ButtonComponent(
+                onButtonClicked = onDismiss,
+                value = stringResource(id = R.string.ok)
+            )
+        }
+    )
+}
 
 
 
