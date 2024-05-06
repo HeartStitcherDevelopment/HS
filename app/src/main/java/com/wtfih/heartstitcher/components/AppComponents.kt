@@ -2,6 +2,8 @@
 
 package com.wtfih.heartstitcher.components
 
+import android.annotation.SuppressLint
+import android.media.MediaPlayer
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -39,6 +41,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -51,6 +54,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
@@ -207,6 +211,7 @@ fun LargeTextField(onStringListChange: (List<String>) -> Unit,labelValue: String
         }
     }
 }
+
 @Composable
 fun StringItem(text: String, onRemove: (String) -> Unit) {
     Row(
@@ -222,6 +227,7 @@ fun StringItem(text: String, onRemove: (String) -> Unit) {
         }
     }
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PasswordTextField(labelValue: String, icon: ImageVector,
@@ -332,6 +338,7 @@ fun ClickableTextComponent(value: String, onTextSelected: (String) -> Unit){
 
 }
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun ButtonComponent(value: String, onButtonClicked : () -> Unit, isEnabled: Boolean = true){
     androidx.compose.material3.
@@ -340,7 +347,7 @@ fun ButtonComponent(value: String, onButtonClicked : () -> Unit, isEnabled: Bool
             .fillMaxWidth()
             .heightIn(48.dp),
         onClick ={
-            onButtonClicked.invoke()
+                onButtonClicked.invoke()
         },
         contentPadding = PaddingValues(),
         colors = ButtonDefaults.buttonColors(Color.Transparent),
@@ -363,6 +370,7 @@ fun ButtonComponent(value: String, onButtonClicked : () -> Unit, isEnabled: Bool
     }
 }
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun SmallButtonComponent(width: Int = 64,value: String, onButtonClicked : () -> Unit, isEnabled: Boolean = true){
     androidx.compose.material3.
@@ -371,7 +379,7 @@ fun SmallButtonComponent(width: Int = 64,value: String, onButtonClicked : () -> 
             .widthIn(width.dp)
             .heightIn(48.dp),
         onClick ={
-            onButtonClicked.invoke()
+                onButtonClicked.invoke()
         },
         contentPadding = PaddingValues(),
         colors = ButtonDefaults.buttonColors(Color.Transparent),
@@ -471,6 +479,7 @@ fun UnderLinedTextComponent(value:String){
     )
 }
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun IconComponent(value: String, onIconClicked : () -> Unit, isEnabled: Boolean = true, painterResource: Painter){
     androidx.compose.material3.
@@ -478,7 +487,7 @@ fun IconComponent(value: String, onIconClicked : () -> Unit, isEnabled: Boolean 
         .heightIn(125.dp)
         .widthIn(125.dp),
         onClick ={
-            onIconClicked.invoke()
+                onIconClicked.invoke()
         },
         contentPadding =  PaddingValues(),
         colors = ButtonDefaults.buttonColors(Color.Transparent),
@@ -542,11 +551,11 @@ fun PanicButtonComponent(onButtonClicked : () -> Unit, isEnabled: Boolean = true
     }
 }
 
-
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun SpinButtonComponent(result: String, onButtonClicked: () -> Unit, isEnabled: Boolean = true) {
     var showDialog by remember { mutableStateOf(false) }
-
+    var soundeffect by remember { mutableStateOf(false) }
     Button(
         modifier = Modifier
             .fillMaxWidth()
@@ -557,6 +566,7 @@ fun SpinButtonComponent(result: String, onButtonClicked: () -> Unit, isEnabled: 
                 delay(10500)
                 showDialog = true
             }
+            soundeffect = true
         },
         contentPadding = PaddingValues(),
         colors = ButtonDefaults.buttonColors(Color.Transparent),
@@ -579,6 +589,13 @@ fun SpinButtonComponent(result: String, onButtonClicked: () -> Unit, isEnabled: 
                 fontWeight = FontWeight.Bold,
                 fontFamily = FontFamily.Monospace
             )
+        }
+    }
+    if(soundeffect){
+        MusicPlayer(audioResourceId = R.raw.spin)
+        CoroutineScope(Dispatchers.Main).launch {
+            delay(10500)
+            soundeffect = false
         }
     }
     if (showDialog) {
@@ -625,9 +642,7 @@ fun SpinButtonComponent(result: String, onButtonClicked: () -> Unit, isEnabled: 
     }
 }
 
-
-
-
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun CheerUpButtonComponent(dataViewModel: CheerupsDataViewModel = viewModel(), value: String, isEnabled: Boolean = true, painterResource: Painter) {
     var notificationText by remember { mutableStateOf("") }
@@ -677,7 +692,7 @@ fun CheerUpButtonComponent(dataViewModel: CheerupsDataViewModel = viewModel(), v
     }
     if (showDialog) {
         AlertDialog(
-            onDismissRequest = { showDialog = false },
+            onDismissRequest = { showDialog = false},
             title = { Text(text = "Your thought of the day!", textAlign = TextAlign.Center) },
             text = {
                 Text(text = randomString,
@@ -693,7 +708,7 @@ fun CheerUpButtonComponent(dataViewModel: CheerupsDataViewModel = viewModel(), v
             },
             confirmButton = {
                 Button(modifier = Modifier.fillMaxWidth(),onClick = {
-                    showDialog = false
+                        showDialog = false
                 },contentPadding =  PaddingValues(),
                     colors = ButtonDefaults.buttonColors(Color.Transparent),
                     shape = RoundedCornerShape(10.dp),) {
@@ -715,73 +730,17 @@ fun CheerUpButtonComponent(dataViewModel: CheerupsDataViewModel = viewModel(), v
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-////TESTING ZONE
-/*
 @Composable
 fun TaskComponent(item: String, onDeleteClicked: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(40.dp) // Adjust the height as needed
+            .height(40.dp)
             .background(
                 brush = Brush.horizontalGradient(
                     colors = listOf(Color.Green, Color.Transparent),
-                    startX = 100f, // Adjust the starting point of the gradient
-                    endX = 650f // Adjust the ending point of the gradient
-                ),
-                shape = RoundedCornerShape(8.dp)
-            )
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = item,
-                fontSize = 25.sp,
-                textAlign = TextAlign.Left,
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(end = 8.dp),
-                overflow = TextOverflow.Visible,
-                softWrap = true
-            )
-            SmallButtonComponent(
-                value = stringResource(id = R.string.delete),
-                onButtonClicked = onDeleteClicked,
-            )
-        }
-    }
-}
-*/
-@Composable
-fun TaskComponent(item: String, onDeleteClicked: () -> Unit) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(40.dp) // Adjust the height as needed
-            .background(
-                brush = Brush.horizontalGradient(
-                    colors = listOf(Color.Green, Color.Transparent),
-                    startX = 100f, // Adjust the starting point of the gradient
-                    endX = 650f // Adjust the ending point of the gradient
+                    startX = 100f,
+                    endX = 650f
                 ),
                 shape = RoundedCornerShape(8.dp)
             )
@@ -814,44 +773,7 @@ fun TaskComponent(item: String, onDeleteClicked: () -> Unit) {
     }
 }
 
-/*
-@Composable
-fun TaskText() {
-    val localFocusManager = LocalFocusManager.current
-    var textValue by remember { mutableStateOf("") }
-    val items = remember { mutableStateListOf<String>() }
-    Column(modifier = Modifier.fillMaxSize()) {
-        TextField(
-            value = textValue,
-            onValueChange = { textValue = it },
-            modifier = Modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text, imeAction = ImeAction.Done),
-            keyboardActions = KeyboardActions{
-                localFocusManager.clearFocus()
-            },
-            maxLines = 1
-        )
-        Spacer(modifier = Modifier.height(20.dp))
-        Button(
-            onClick = {
-                if (textValue.isNotBlank()) {
-                    items.add(textValue)
-                    textValue = ""
-                }
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(stringResource(id = R.string.addtask))
-        }
-        Spacer(modifier = Modifier.height(20.dp))
-        LazyColumnItems(items = items, onDeleteClicked = { item ->
-            items.remove(item)
-        })
-    }
-}
-*/
-
-
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun TaskText(tasks: MutableList<String>) {
     val localFocusManager = LocalFocusManager.current
@@ -859,7 +781,7 @@ fun TaskText(tasks: MutableList<String>) {
     val items = remember { mutableStateListOf<String>().apply { addAll(tasks) }  }
     val db = Firebase.firestore
     val id = Firebase.auth.currentUser!!.uid
-
+    var soundeffect by remember { mutableStateOf(false) }
     Column(modifier = Modifier.fillMaxSize()) {
         TextField(
             value = textValue,
@@ -882,6 +804,7 @@ fun TaskText(tasks: MutableList<String>) {
                     db.collection("users").document(id).update("tasks", tasksList)
                     textValue = ""
                 }
+
             },
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -905,6 +828,7 @@ fun TaskText(tasks: MutableList<String>) {
         LazyColumnItems(
             items = items,
             onDeleteClicked = { item ->
+                soundeffect = true
                 items.remove(item)
                 (tasks).remove(item)
                 val tasksList = items.map { it.toString() }
@@ -912,12 +836,16 @@ fun TaskText(tasks: MutableList<String>) {
             }
         )
         Spacer(modifier = Modifier.height(30.dp))
-
-
+        if(soundeffect){
+            MusicPlayer(audioResourceId = R.raw.delete)
+            CoroutineScope(Dispatchers.Main).launch {
+                delay(3000)
+                soundeffect = false
+            }
+        }
     }
 }
 
-/*
 @Composable
 fun LazyColumnItems(items: List<String>, onDeleteClicked: (String) -> Unit) {
     LazyColumn {
@@ -927,34 +855,49 @@ fun LazyColumnItems(items: List<String>, onDeleteClicked: (String) -> Unit) {
         }
     }
 }
-*/
-@Composable
-fun LazyColumnItems(items: List<String>, onDeleteClicked: (String) -> Unit) {
-    LazyColumn {
-        items(items) { item ->
-            TaskComponent(item = item, onDeleteClicked = { onDeleteClicked(item) })
-            Spacer(modifier = Modifier.height(10.dp))
-        }
-    }
-}
 
 @Composable
-fun AlertDialogComposable(
-    text: String,
-    onDismiss: () -> Unit
-) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(text = text) },
-        confirmButton = {
-            ButtonComponent(
-                onButtonClicked = onDismiss,
-                value = stringResource(id = R.string.ok)
+fun MusicPlayer(loop: Boolean = false,audioResourceId: Int) {
+    val context = LocalContext.current
+    val mediaPlayer = remember {
+        MediaPlayer.create(context, audioResourceId).apply {
+            isLooping = loop // Loop the audio track
+            start() // Start playback
+        }
+    }
+
+    // Remember to release the MediaPlayer when the composable is no longer in use
+    DisposableEffect(Unit) {
+        onDispose {
+            mediaPlayer.release()
+        }
+    }
+
+    /*// UI for the music player controls (pause, play, stop, etc.) can be added here
+    Box(modifier = Modifier.size(48.dp)) {
+        // Example: Display a play/pause icon
+        IconButton(
+            onClick = {
+                if (mediaPlayer.isPlaying) {
+                    mediaPlayer.pause()
+                } else {
+                    mediaPlayer.start()
+                }
+            },
+            modifier = Modifier.size(48.dp)
+        ) {
+            val iconRes = if (mediaPlayer.isPlaying) {
+                R.drawable.ic_pause
+            } else {
+                R.drawable.ic_play
+            }
+            Icon(
+                painter = painterResource(id = iconRes),
+                contentDescription = stringResource(id = R.string.play_pause)
             )
         }
-    )
+    }*/
 }
-
 
 
 

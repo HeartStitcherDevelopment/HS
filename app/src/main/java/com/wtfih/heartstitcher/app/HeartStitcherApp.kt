@@ -6,6 +6,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.wtfih.heartstitcher.R
+import com.wtfih.heartstitcher.components.MusicPlayer
 import com.wtfih.heartstitcher.navigation.HeartStitcherRouter
 import com.wtfih.heartstitcher.navigation.Screen
 import com.wtfih.heartstitcher.screens.AchievementsScreen
@@ -25,6 +27,7 @@ import com.wtfih.heartstitcher.screens.WheelScreen
 
 @Composable
 fun HeartSitcherApp(){
+    MusicPlayer(loop = true, audioResourceId = R.raw.lights)
     Surface(modifier = Modifier.fillMaxSize(),
         color = Color.White
     ){

@@ -20,8 +20,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import com.wtfih.heartstitcher.R
 import com.wtfih.heartstitcher.components.CheerUpButtonComponent
 import com.wtfih.heartstitcher.components.HeadingTextComponent
@@ -35,7 +33,7 @@ import com.wtfih.heartstitcher.ui.theme.Purple
 
 @Composable
 fun HomeScreen(signUpViewModel: SignUpViewModel = SignUpViewModel()) {
-    val Current_User = Firebase.auth.currentUser!!.uid
+
     Box(
         modifier = Modifier
             .fillMaxSize()
