@@ -10,7 +10,7 @@ import com.wtfih.heartstitcher.ui.theme.Default2
 import com.wtfih.heartstitcher.ui.theme.DefaultTheme
 
 class ThemeData : ViewModel() {
-    private val _theme = mutableIntStateOf(0)
+    private val _theme = mutableIntStateOf(-1)
     private val _login = mutableStateOf(false)
     private val _color = mutableStateOf(DefaultTheme)
     private val _color1 = mutableStateOf(Default1)
@@ -24,7 +24,7 @@ class ThemeData : ViewModel() {
     fun setTheme(newTheme: Int) {
         _theme.value = newTheme
     }
-    fun setLogin() {
+    fun LogInFLag() {
         _login.value = true
     }
     fun setColor(newColor: androidx.compose.ui.graphics.Color){
@@ -36,5 +36,8 @@ class ThemeData : ViewModel() {
     }
     fun setColor2(newColor: androidx.compose.ui.graphics.Color){
         _color2.value = newColor
+    }
+    fun LogOutFlag(){
+        _login.value = false
     }
 }

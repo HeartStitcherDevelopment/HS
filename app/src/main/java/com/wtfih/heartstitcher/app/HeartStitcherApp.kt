@@ -68,7 +68,7 @@ fun HeartSitcherApp(themeData: ThemeData = viewModel(), dataViewModel: UserDataV
     Surface(modifier = Modifier.fillMaxSize())
     {
         if(login.value) {
-            val current = dataViewModel.state.value["theme"] as? Int ?: 0
+            val current = dataViewModel.state.value["theme"] as? Int ?: -1
             if(flag){
                 flag = false
                 themeData.setTheme(current)
@@ -193,6 +193,18 @@ fun HeartSitcherApp(themeData: ThemeData = viewModel(), dataViewModel: UserDataV
                         MusicPlayer(loop = true, audioResourceId = R.raw.mikichan)
                         Image(
                             painter = painterResource(id = R.drawable.baka_background),
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.FillBounds
+                        )
+                    }
+                    else -> {
+                        ColorTheme = DefaultTheme
+                        ButtonColor1 = Default1
+                        ButtonColor2 = Default2
+                        MusicPlayer(loop = true, audioResourceId = R.raw.lights)
+                        Image(
+                            painter = painterResource(id = R.drawable.rainy_background),
                             contentDescription = null,
                             modifier = Modifier.fillMaxSize(),
                             contentScale = ContentScale.FillBounds

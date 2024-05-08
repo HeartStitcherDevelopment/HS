@@ -34,7 +34,7 @@ import com.wtfih.heartstitcher.navigation.Screen
 
 @Composable
 fun HomeScreen(signUpViewModel: SignUpViewModel = SignUpViewModel(),themeData: ThemeData = viewModel()) {
-    themeData.setLogin()
+    themeData.LogInFLag()
     val color by remember {  derivedStateOf { themeData.color.value } }
     val color1 by remember {  derivedStateOf { themeData.color1.value } }
     val color2 by remember {  derivedStateOf { themeData.color2.value } }
@@ -154,7 +154,8 @@ fun HomeScreen(signUpViewModel: SignUpViewModel = SignUpViewModel(),themeData: T
                         Spacer(modifier = Modifier.height(20.dp))
                         IconComponent(
                             value = stringResource(id = R.string.logout),
-                            onIconClicked = { signUpViewModel.logout() },
+                            onIconClicked = {themeData.LogInFLag()
+                                signUpViewModel.logout() },
                             isEnabled = true,
                             painterResource(id = R.drawable.logout),
                             color = color,
