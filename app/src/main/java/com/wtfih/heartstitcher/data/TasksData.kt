@@ -26,7 +26,7 @@ class UserDataViewModel: ViewModel(){
     }
     fun refresh()
     {
-        viewModelScope.launch() {
+        viewModelScope.launch {
             state.value = getUserFromFireStore()
         }
     }
@@ -34,7 +34,7 @@ class UserDataViewModel: ViewModel(){
 
 suspend fun getUserFromFireStore():HashMap<String,String>{
     val database = FirebaseFirestore.getInstance()
-    val currentUser = Firebase.auth.currentUser!!.uid
+    val currentUser = Firebase.auth.currentUser?.uid ?: "placeholder"
     var hashmap = HashMap<String,String>()
     try{
         val documentSnapshot = database.collection("users")

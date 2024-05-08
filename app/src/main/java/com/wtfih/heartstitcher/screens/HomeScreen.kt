@@ -1,6 +1,5 @@
 package com.wtfih.heartstitcher.screens
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,33 +12,35 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.wtfih.heartstitcher.R
 import com.wtfih.heartstitcher.components.CheerUpButtonComponent
 import com.wtfih.heartstitcher.components.HeadingTextComponent
 import com.wtfih.heartstitcher.components.IconComponent
 import com.wtfih.heartstitcher.components.PanicButtonComponent
 import com.wtfih.heartstitcher.data.SignUpViewModel
+import com.wtfih.heartstitcher.data.ThemeData
 import com.wtfih.heartstitcher.navigation.HeartStitcherRouter
 import com.wtfih.heartstitcher.navigation.Screen
-import com.wtfih.heartstitcher.ui.theme.Blue
-import com.wtfih.heartstitcher.ui.theme.Purple
 
 @Composable
-fun HomeScreen(signUpViewModel: SignUpViewModel = SignUpViewModel()) {
-
+fun HomeScreen(signUpViewModel: SignUpViewModel = SignUpViewModel(),themeData: ThemeData = viewModel()) {
+    themeData.setLogin()
+    val color by remember {  derivedStateOf { themeData.color.value } }
+    val color1 by remember {  derivedStateOf { themeData.color1.value } }
+    val color2 by remember {  derivedStateOf { themeData.color2.value } }
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                brush = Brush.horizontalGradient(listOf(Purple, Blue))
-            )
             .padding(28.dp)
     ) {
         LazyColumn(
@@ -47,7 +48,7 @@ fun HomeScreen(signUpViewModel: SignUpViewModel = SignUpViewModel()) {
                 .fillMaxSize(),
         ) {
             item {
-                HeadingTextComponent(value = stringResource(id = R.string.home))
+                HeadingTextComponent(value = stringResource(id = R.string.home), c = color)
             }
 
             item {
@@ -78,27 +79,41 @@ fun HomeScreen(signUpViewModel: SignUpViewModel = SignUpViewModel()) {
                             value = stringResource(id = R.string.notepad),
                             onIconClicked = { HeartStitcherRouter.navigateTo(Screen.NotepadScreen) },
                             isEnabled = true,
-                            painterResource(id = R.drawable.notepad)
+                            painterResource(id = R.drawable.notepad),
+                            color = color,
+                            color1 = color1,
+                            color2 = color2
                         )
                         Spacer(modifier = Modifier.height(20.dp))
                         IconComponent(
                             value = stringResource(id = R.string.nutrition),
-                            onIconClicked = { HeartStitcherRouter.navigateTo(Screen.NutritionScreen) },
+                            onIconClicked = {
+                                HeartStitcherRouter.navigateTo(Screen.NutritionScreen) },
                             isEnabled = true,
-                            painterResource(id = R.drawable.nutrition)
+                            painterResource(id = R.drawable.nutrition),
+                            color = color,
+                            color1 = color1,
+                            color2 = color2
                         )
                         Spacer(modifier = Modifier.height(20.dp))
                         CheerUpButtonComponent(
                             value = stringResource(id = R.string.cheer),
                             isEnabled = true,
-                            painterResource = painterResource(id = R.drawable.cheer)
+                            painterResource = painterResource(id = R.drawable.cheer),
+                            color = color,
+                            color1 = color1,
+                            color2 = color2
                         )
                         Spacer(modifier = Modifier.height(20.dp))
                         IconComponent(
                             value = stringResource(id = R.string.settings),
-                            onIconClicked = { HeartStitcherRouter.navigateTo(Screen.SettingsScreen) },
+                            onIconClicked = {
+                                HeartStitcherRouter.navigateTo(Screen.SettingsScreen) },
                             isEnabled = true,
-                            painterResource(id = R.drawable.settings)
+                            painterResource(id = R.drawable.settings),
+                            color = color,
+                            color1 = color1,
+                            color2 = color2
                         )
                     }
 
@@ -109,28 +124,42 @@ fun HomeScreen(signUpViewModel: SignUpViewModel = SignUpViewModel()) {
                             value = stringResource(id = R.string.task),
                             onIconClicked = { HeartStitcherRouter.navigateTo(Screen.TaskScreen) },
                             isEnabled = true,
-                            painterResource(id = R.drawable.wheel)
+                            painterResource(id = R.drawable.wheel),
+                            color = color,
+                            color1 = color1,
+                            color2 = color2
                         )
                         Spacer(modifier = Modifier.height(20.dp))
                         IconComponent(
                             value = stringResource(id = R.string.sleep),
-                            onIconClicked = { HeartStitcherRouter.navigateTo(Screen.SleepScreen) },
+                            onIconClicked = {
+                                HeartStitcherRouter.navigateTo(Screen.SleepScreen) },
                             isEnabled = true,
-                            painterResource(id = R.drawable.sleep)
+                            painterResource(id = R.drawable.sleep),
+                            color = color,
+                            color1 = color1,
+                            color2 = color2
                         )
                         Spacer(modifier = Modifier.height(20.dp))
                         IconComponent(
                             value = stringResource(id = R.string.achievements),
-                            onIconClicked = { HeartStitcherRouter.navigateTo(Screen.AchievementsScreen) },
+                            onIconClicked = {
+                                HeartStitcherRouter.navigateTo(Screen.AchievementsScreen) },
                             isEnabled = true,
-                            painterResource(id = R.drawable.achievements)
+                            painterResource(id = R.drawable.achievements),
+                            color = color,
+                            color1 = color1,
+                            color2 = color2
                         )
                         Spacer(modifier = Modifier.height(20.dp))
                         IconComponent(
                             value = stringResource(id = R.string.logout),
                             onIconClicked = { signUpViewModel.logout() },
                             isEnabled = true,
-                            painterResource(id = R.drawable.logout)
+                            painterResource(id = R.drawable.logout),
+                            color = color,
+                            color1 = color1,
+                            color2 = color2
                         )
                     }
                 }

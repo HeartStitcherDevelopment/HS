@@ -5,6 +5,8 @@ package com.wtfih.heartstitcher.components
 import android.annotation.SuppressLint
 import android.media.MediaPlayer
 import android.util.Log
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +19,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -54,9 +57,11 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -81,15 +86,15 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.wtfih.heartstitcher.R
 import com.wtfih.heartstitcher.data.CheerupsDataViewModel
+import com.wtfih.heartstitcher.data.Globals.ButtonColor1
+import com.wtfih.heartstitcher.data.Globals.ButtonColor2
+import com.wtfih.heartstitcher.data.Globals.ColorTheme
 import com.wtfih.heartstitcher.navigation.HeartStitcherRouter
 import com.wtfih.heartstitcher.navigation.Screen
 import com.wtfih.heartstitcher.ui.theme.BGColor
-import com.wtfih.heartstitcher.ui.theme.GrayColor
 import com.wtfih.heartstitcher.ui.theme.PanicColor1
 import com.wtfih.heartstitcher.ui.theme.Primary
 import com.wtfih.heartstitcher.ui.theme.Secondary
-import com.wtfih.heartstitcher.ui.theme.SpinButtonColor1
-import com.wtfih.heartstitcher.ui.theme.TextColor
 import com.wtfih.heartstitcher.ui.theme.componentShapes
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -109,13 +114,13 @@ fun NormalTextComponent(value:String){
             fontWeight = FontWeight.Normal,
             fontStyle = FontStyle.Normal
         )
-        ,color = colorResource(id = R.color.colorText),
+        ,color = ColorTheme,
         textAlign = TextAlign.Center
     )
 }
 
 @Composable
-fun HeadingTextComponent(value:String){
+fun HeadingTextComponent(value:String, c: Color = ColorTheme){
     Text(
         text = value,
         modifier = Modifier
@@ -126,7 +131,7 @@ fun HeadingTextComponent(value:String){
             fontWeight = FontWeight.Bold,
             fontStyle = FontStyle.Normal
         )
-        ,color = colorResource(id = R.color.colorText),
+        ,color = c,
         textAlign = TextAlign.Center
     )
 }
@@ -161,7 +166,7 @@ fun TextFieldComponent(labelValue: String, painterResource: Painter,
             onTextSelected(it)
         },
         leadingIcon = {
-            Icon(painter = painterResource, contentDescription ="" )
+            Icon(painter = painterResource, contentDescription ="")
         },
         isError = !errorStatus
     )
@@ -325,7 +330,7 @@ fun ClickableTextComponent(value: String, onTextSelected: (String) -> Unit){
             append(termsAndConditionText)
         }
     }
-    ClickableText(text = annotatedString, onClick = { offset ->
+    ClickableText(text = annotatedString,onClick = { offset ->
         annotatedString.getStringAnnotations(offset,offset)
             .firstOrNull()?.also{span->
                 Log.d("ClickableTextComponent","{$span}")
@@ -352,20 +357,22 @@ fun ButtonComponent(value: String, onButtonClicked : () -> Unit, isEnabled: Bool
         contentPadding = PaddingValues(),
         colors = ButtonDefaults.buttonColors(Color.Transparent),
         shape = RoundedCornerShape(50.dp),
-        enabled = isEnabled
+        enabled = isEnabled,
+        border = BorderStroke(2.dp, ColorTheme)
     ) {
         Box(modifier = Modifier
             .fillMaxWidth()
             .heightIn(48.dp)
             .background(
-                brush = Brush.horizontalGradient(listOf(Secondary, Primary)),
+                brush = Brush.horizontalGradient(listOf(ButtonColor1, ButtonColor2)),
                 shape = RoundedCornerShape(50.dp)
             ),
             contentAlignment = Alignment.Center
         ){
             Text(text = value,
                 fontSize = 18.sp,
-                fontWeight = FontWeight.Bold)
+                fontWeight = FontWeight.Bold,
+                color = ColorTheme)
         }
     }
 }
@@ -384,20 +391,22 @@ fun SmallButtonComponent(width: Int = 64,value: String, onButtonClicked : () -> 
         contentPadding = PaddingValues(),
         colors = ButtonDefaults.buttonColors(Color.Transparent),
         shape = RoundedCornerShape(50.dp),
-        enabled = isEnabled
+        enabled = isEnabled,
+        border = BorderStroke(2.dp, ColorTheme)
     ) {
         Box(modifier = Modifier
             .widthIn(width.dp)
             .heightIn(48.dp)
             .background(
-                brush = Brush.horizontalGradient(listOf(Secondary, Primary)),
+                brush = Brush.horizontalGradient(listOf(ButtonColor1, ButtonColor2)),
                 shape = RoundedCornerShape(50.dp)
             ),
             contentAlignment = Alignment.Center
         ){
             Text(text = value,
                 fontSize = 13.sp,
-                fontWeight = FontWeight.Bold)
+                fontWeight = FontWeight.Bold,
+                color = ColorTheme)
         }
     }
 }
@@ -409,17 +418,17 @@ fun DividerTextComponent(){
         Divider(modifier = Modifier
             .fillMaxWidth()
             .weight(1f),
-            color = GrayColor,
+            color = ColorTheme,
             thickness = 1.dp
         )
         Text(text = stringResource(id = R.string.or),
             modifier = Modifier.padding(8.dp),
             fontSize = 18.sp,
-            color = TextColor)
+            color = ColorTheme)
         Divider(modifier = Modifier
             .fillMaxWidth()
             .weight(1f),
-            color = GrayColor,
+            color = ColorTheme,
             thickness = 1.dp
         )
     }
@@ -434,7 +443,7 @@ fun ClickableLoginTextComponent(tryingToLogin: Boolean = true, onTextSelected: (
 
     val annotatedString = buildAnnotatedString {
         append(initialText)
-        withStyle(style = SpanStyle(color = colorResource(id = R.color.colorWhite))){
+        withStyle(style = SpanStyle(color = ColorTheme)){
             pushStringAnnotation(tag = loginText, annotation = loginText)
             append(loginText)
         }
@@ -446,7 +455,8 @@ fun ClickableLoginTextComponent(tryingToLogin: Boolean = true, onTextSelected: (
             fontSize = 21.sp,
             fontWeight = FontWeight.Normal,
             fontStyle = FontStyle.Normal,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            color = ColorTheme
         ),
         text = annotatedString, onClick = { offset ->
         annotatedString.getStringAnnotations(offset,offset)
@@ -473,7 +483,7 @@ fun UnderLinedTextComponent(value:String){
             fontWeight = FontWeight.Normal,
             fontStyle = FontStyle.Normal
         ),
-        color = colorResource(id = R.color.colorWhite),
+        color = ColorTheme,
         textAlign = TextAlign.Center,
         textDecoration = TextDecoration.Underline
     )
@@ -481,7 +491,8 @@ fun UnderLinedTextComponent(value:String){
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
-fun IconComponent(value: String, onIconClicked : () -> Unit, isEnabled: Boolean = true, painterResource: Painter){
+fun IconComponent(value: String, onIconClicked : () -> Unit, isEnabled: Boolean = true, painterResource: Painter,
+                  color: Color = ColorTheme, color1: Color = ButtonColor1, color2: Color = ButtonColor2){
     androidx.compose.material3.
     Button(modifier = Modifier
         .heightIn(125.dp)
@@ -493,12 +504,13 @@ fun IconComponent(value: String, onIconClicked : () -> Unit, isEnabled: Boolean 
         colors = ButtonDefaults.buttonColors(Color.Transparent),
         shape = RoundedCornerShape(10.dp),
         enabled = isEnabled,
+        border = BorderStroke(2.dp, color)
     ){
         Box(modifier = Modifier
             .heightIn(125.dp)
             .widthIn(125.dp)
             .background(
-                brush = Brush.horizontalGradient(listOf(Secondary, Primary)),
+                brush = Brush.horizontalGradient(listOf(color1, color2)),
                 shape = RoundedCornerShape(10.dp)
             ),
             contentAlignment = Alignment.Center
@@ -506,14 +518,15 @@ fun IconComponent(value: String, onIconClicked : () -> Unit, isEnabled: Boolean 
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Icon(painter = painterResource, contentDescription = "",modifier = Modifier.size(75.dp))
+                Icon(painter = painterResource, contentDescription = "",modifier = Modifier.size(75.dp),tint = ColorTheme)
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
                     text = value,
                     fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = color
                 )
-            }
+        }
         }
     }
 }
@@ -571,14 +584,15 @@ fun SpinButtonComponent(result: String, onButtonClicked: () -> Unit, isEnabled: 
         contentPadding = PaddingValues(),
         colors = ButtonDefaults.buttonColors(Color.Transparent),
         shape = RoundedCornerShape(50.dp),
-        enabled = isEnabled
+        enabled = isEnabled,
+        border = BorderStroke(2.dp, ColorTheme)
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .heightIn(82.dp)
                 .background(
-                    brush = Brush.horizontalGradient(listOf(SpinButtonColor1, Color.Red)),
+                    brush = Brush.horizontalGradient(listOf(ButtonColor1, ButtonColor2)),
                     shape = RoundedCornerShape(50.dp)
                 ),
             contentAlignment = Alignment.Center
@@ -587,12 +601,13 @@ fun SpinButtonComponent(result: String, onButtonClicked: () -> Unit, isEnabled: 
                 text = stringResource(id = R.string.SPIN),
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold,
-                fontFamily = FontFamily.Monospace
+                fontFamily = FontFamily.Monospace,
+                color = ColorTheme
             )
         }
     }
     if(soundeffect){
-        MusicPlayer(audioResourceId = R.raw.spin)
+        //MusicPlayer(audioResourceId = R.raw.spin)
         CoroutineScope(Dispatchers.Main).launch {
             delay(10500)
             soundeffect = false
@@ -601,7 +616,8 @@ fun SpinButtonComponent(result: String, onButtonClicked: () -> Unit, isEnabled: 
     if (showDialog) {
         AlertDialog(
             onDismissRequest = { showDialog = false },
-            title = { Text(text = stringResource(id = R.string.winner), textAlign = TextAlign.Center) },
+            containerColor = ButtonColor1,
+            title = { Text(text = stringResource(id = R.string.winner), textAlign = TextAlign.Center, color = ColorTheme, fontWeight = FontWeight.Bold)},
             text = {
                 Text(
                     text = result,
@@ -611,7 +627,8 @@ fun SpinButtonComponent(result: String, onButtonClicked: () -> Unit, isEnabled: 
                         .widthIn(40.dp)
                         .padding(end = 8.dp),
                     overflow = TextOverflow.Visible,
-                    maxLines = Int.MAX_VALUE
+                    maxLines = Int.MAX_VALUE,
+                    color = ColorTheme
                 )
             },
             confirmButton = {
@@ -622,19 +639,20 @@ fun SpinButtonComponent(result: String, onButtonClicked: () -> Unit, isEnabled: 
                     },
                     contentPadding = PaddingValues(),
                     colors = ButtonDefaults.buttonColors(Color.Transparent),
-                    shape = RoundedCornerShape(10.dp)
+                    shape = RoundedCornerShape(10.dp),
+                    border = BorderStroke(2.dp, ColorTheme)
                 ) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
                             .heightIn(40.dp)
                             .background(
-                                brush = Brush.horizontalGradient(listOf(Secondary, Primary)),
+                                brush = Brush.horizontalGradient(listOf(ButtonColor1, ButtonColor2)),
                                 shape = RoundedCornerShape(10.dp)
                             ),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(stringResource(id = R.string.ok))
+                        Text(stringResource(id = R.string.ok),color = ColorTheme)
                     }
                 }
             }
@@ -644,7 +662,8 @@ fun SpinButtonComponent(result: String, onButtonClicked: () -> Unit, isEnabled: 
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
-fun CheerUpButtonComponent(dataViewModel: CheerupsDataViewModel = viewModel(), value: String, isEnabled: Boolean = true, painterResource: Painter) {
+fun CheerUpButtonComponent(dataViewModel: CheerupsDataViewModel = viewModel(), value: String, isEnabled: Boolean = true, painterResource: Painter,
+                           color: Color = ColorTheme, color1: Color = ButtonColor1, color2: Color = ButtonColor2) {
     var notificationText by remember { mutableStateOf("") }
     var showDialog by remember { mutableStateOf(false) }
     val cheerupsHashMap: HashMap<String, String> = dataViewModel.state.value
@@ -667,12 +686,13 @@ fun CheerUpButtonComponent(dataViewModel: CheerupsDataViewModel = viewModel(), v
         colors = ButtonDefaults.buttonColors(Color.Transparent),
         shape = RoundedCornerShape(10.dp),
         enabled = isEnabled,
+        border = BorderStroke(2.dp, color)
     ){
         Box(modifier = Modifier
             .heightIn(125.dp)
             .widthIn(125.dp)
             .background(
-                brush = Brush.horizontalGradient(listOf(Secondary, Primary)),
+                brush = Brush.horizontalGradient(listOf(color1, color2)),
                 shape = RoundedCornerShape(10.dp)
             ),
             contentAlignment = Alignment.Center
@@ -680,12 +700,13 @@ fun CheerUpButtonComponent(dataViewModel: CheerupsDataViewModel = viewModel(), v
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Icon(painter = painterResource, contentDescription = "",modifier = Modifier.size(75.dp))
+                Icon(painter = painterResource, contentDescription = "",modifier = Modifier.size(75.dp), tint = color)
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
                     text = value,
                     fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = color
                 )
             }
         }
@@ -693,7 +714,7 @@ fun CheerUpButtonComponent(dataViewModel: CheerupsDataViewModel = viewModel(), v
     if (showDialog) {
         AlertDialog(
             onDismissRequest = { showDialog = false},
-            title = { Text(text = "Your thought of the day!", textAlign = TextAlign.Center) },
+            title = { Text(text = "Your thought of the day!", textAlign = TextAlign.Center,color = color,fontWeight = FontWeight.Bold) },
             text = {
                 Text(text = randomString,
                     fontSize = 20.sp,
@@ -703,25 +724,32 @@ fun CheerUpButtonComponent(dataViewModel: CheerupsDataViewModel = viewModel(), v
                         .padding(end = 8.dp),
                     overflow = TextOverflow.Visible,
                     softWrap = true,
-                    maxLines = Int.MAX_VALUE
+                    maxLines = Int.MAX_VALUE,
+                    color = color
                     )
             },
+            containerColor = color1,
+            modifier = Modifier.background(
+                color = color1,
+                shape = RoundedCornerShape(10.dp)
+            ),
             confirmButton = {
                 Button(modifier = Modifier.fillMaxWidth(),onClick = {
                         showDialog = false
                 },contentPadding =  PaddingValues(),
+                    border = BorderStroke(2.dp, color),
                     colors = ButtonDefaults.buttonColors(Color.Transparent),
                     shape = RoundedCornerShape(10.dp),) {
                     Box(modifier = Modifier
                         .fillMaxWidth()
                         .heightIn(40.dp)
                         .background(
-                            brush = Brush.horizontalGradient(listOf(Secondary, Primary)),
+                            brush = Brush.horizontalGradient(listOf(color1, color2)),
                             shape = RoundedCornerShape(10.dp)
                         ),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(stringResource(id = R.string.thanks))
+                    Text(stringResource(id = R.string.thanks), color = color)
                 }
                 }
             }
@@ -738,11 +766,11 @@ fun TaskComponent(item: String, onDeleteClicked: () -> Unit) {
             .height(40.dp)
             .background(
                 brush = Brush.horizontalGradient(
-                    colors = listOf(Color.Green, Color.Transparent),
-                    startX = 100f,
-                    endX = 650f
+                    colors = listOf(ButtonColor1, Color.Transparent),
+                    startX = 500f,
+                    endX = 1000f
                 ),
-                shape = RoundedCornerShape(8.dp)
+                shape = RoundedCornerShape(8.dp),
             )
     ) {
         Row(
@@ -763,7 +791,8 @@ fun TaskComponent(item: String, onDeleteClicked: () -> Unit) {
                     .weight(1f)
                     .padding(end = 8.dp),
                 overflow = TextOverflow.Visible,
-                softWrap = true
+                softWrap = true,
+                color = ColorTheme
             )
             SmallButtonComponent(
                 value = stringResource(id = R.string.delete),
@@ -795,8 +824,8 @@ fun TaskText(tasks: MutableList<String>) {
         )
         Spacer(modifier = Modifier.height(20.dp))
 
-        Button(
-            onClick = {
+        ButtonComponent(value = stringResource(id = R.string.addtask),
+            onButtonClicked = {
                 if (textValue.isNotBlank()) {
                     items.add(textValue)
                     (tasks).remove(textValue)
@@ -804,24 +833,10 @@ fun TaskText(tasks: MutableList<String>) {
                     db.collection("users").document(id).update("tasks", tasksList)
                     textValue = ""
                 }
-
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(stringResource(id = R.string.addtask))
-        }
+            })
         Spacer(modifier = Modifier.height(10.dp))
-        Button(
-            onClick = {
-                HeartStitcherRouter.navigateTo(Screen.WheelScreen)
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp)
-
-        ) {
-            Text(stringResource(id = R.string.stw))
-        }
+        ButtonComponent(value = stringResource(id = R.string.spin),
+            onButtonClicked = { HeartStitcherRouter.navigateTo(Screen.WheelScreen)})
 
         Spacer(modifier = Modifier.height(10.dp))
 
@@ -866,16 +881,15 @@ fun MusicPlayer(loop: Boolean = false,audioResourceId: Int) {
         }
     }
 
-    // Remember to release the MediaPlayer when the composable is no longer in use
+
     DisposableEffect(Unit) {
         onDispose {
             mediaPlayer.release()
         }
     }
-
-    /*// UI for the music player controls (pause, play, stop, etc.) can be added here
+    /*
     Box(modifier = Modifier.size(48.dp)) {
-        // Example: Display a play/pause icon
+
         IconButton(
             onClick = {
                 if (mediaPlayer.isPlaying) {
@@ -899,7 +913,54 @@ fun MusicPlayer(loop: Boolean = false,audioResourceId: Int) {
     }*/
 }
 
-
+@SuppressLint("CoroutineCreationDuringComposition")
+@Composable
+fun ThemeIcon(
+    value: String,
+    onIconClicked: () -> Unit,
+    isEnabled: Boolean = true,
+    painterResource: Int,
+    textColor: Color = ColorTheme
+) {
+    Box(
+        modifier = Modifier
+            .height(198.dp)
+            .width(132.dp) // Adjust width as needed
+            .padding(16.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Button(
+            onClick = { onIconClicked.invoke() },
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(),
+            colors = ButtonDefaults.buttonColors(Color.Transparent),
+            shape = RoundedCornerShape(10.dp),
+            enabled = isEnabled,
+            border = BorderStroke(2.dp, textColor) // Border modifier added here
+        ) {
+            Box(modifier = Modifier.fillMaxSize()) {
+                Image(
+                    painter = painterResource(id = painterResource),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.FillBounds
+                )
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Spacer(modifier = Modifier.height(5.dp))
+                    Text(
+                        text = value,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center,
+                        color = textColor
+                    )
+                }
+            }
+        }
+    }
+}
 
 
 

@@ -134,4 +134,17 @@
     <string name="stw">Spin the Wheel!</string>
     <string name="ok">Okay!</string>
     <string name="winner">The winner is:</string>
+    <string name="theme">Themes\n</string>
+    <string name="themes">Themes\n</string>
+    <string name="japan">Japan</string>
+    <string name="def">Default</string>
+    <string name="future">Future</string>
+    <string name="chill">Chill</string>
+    <string name="anime">Anime</string>
+    <string name="retro">Retro</string>
+    <string name="roblox">Roblox</string>
+    <string name="baka">Pola</string>
+    <string name="music">Music</string>
+    <string name="sounds">Sounds</string>
+    <string name="rain">Rain</string>
 </resources>

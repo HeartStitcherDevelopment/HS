@@ -11,7 +11,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
@@ -34,16 +33,13 @@ import com.wtfih.heartstitcher.data.LogInViewModel
 import com.wtfih.heartstitcher.navigation.HeartStitcherRouter
 import com.wtfih.heartstitcher.navigation.Screen
 import com.wtfih.heartstitcher.navigation.SystemBackButtonHandler
-import com.wtfih.heartstitcher.ui.theme.Blue
-import com.wtfih.heartstitcher.ui.theme.Purple
 
 @Composable
 fun LoginScreen(logInViewModel: LogInViewModel = viewModel()){
 
     Box(modifier = Modifier.fillMaxSize()
-                            .background(
-            brush = Brush.horizontalGradient(listOf(Purple, Blue)))
-                            .padding(28.dp),
+        //.background(brush = Brush.horizontalGradient(listOf(Purple, Blue)))
+        .padding(28.dp),
         contentAlignment = Alignment.Center,
         ) {
 

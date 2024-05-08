@@ -6,8 +6,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -22,12 +25,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.wtfih.heartstitcher.R
 import com.wtfih.heartstitcher.components.HeadingTextComponent
+import com.wtfih.heartstitcher.data.Globals
 import com.wtfih.heartstitcher.data.UserDataViewModel
 import com.wtfih.heartstitcher.navigation.HeartStitcherRouter
 import com.wtfih.heartstitcher.navigation.Screen
 import com.wtfih.heartstitcher.navigation.SystemBackButtonHandler
-import com.wtfih.heartstitcher.ui.theme.Blue
-import com.wtfih.heartstitcher.ui.theme.Purple
 import kotlinx.coroutines.delay
 
 @Composable
@@ -48,7 +50,7 @@ fun LoadingScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(brush = Brush.horizontalGradient(listOf(Purple, Blue)))
+                //.background(brush = Brush.horizontalGradient(listOf(Purple, Blue)))
                 .padding(28.dp)
         ) {
             Column(
@@ -56,8 +58,21 @@ fun LoadingScreen(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(25.dp)
+                        .background(
+                            brush = Brush.horizontalGradient(listOf(
+                                Globals.ButtonColor1,
+                                Globals.ButtonColor2
+                            )),
+                            shape = RoundedCornerShape(250.dp)
+                        ) // Background color of the box
+                        .padding(16.dp) // Padding around the text
+                ){
                 HeadingTextComponent(value = stringResource(id = R.string.loading))
-                Spacer(modifier = Modifier.height(50.dp))
+                Spacer(modifier = Modifier.height(50.dp))}
             }
         }
     } else {

@@ -1,6 +1,5 @@
 package com.wtfih.heartstitcher.screens
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,7 +10,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -31,14 +29,11 @@ import com.wtfih.heartstitcher.data.SignUpUIEvent
 import com.wtfih.heartstitcher.data.SignUpViewModel
 import com.wtfih.heartstitcher.navigation.HeartStitcherRouter
 import com.wtfih.heartstitcher.navigation.Screen
-import com.wtfih.heartstitcher.ui.theme.Blue
-import com.wtfih.heartstitcher.ui.theme.Purple
 
 @Composable
 fun SignUpScreen (signUpViewModel: SignUpViewModel = viewModel()){
     Box(modifier = Modifier.fillMaxSize()
-        .background(
-            brush = Brush.horizontalGradient(listOf(Purple, Blue)))
+        //.background(brush = Brush.horizontalGradient(listOf(Purple, Blue)))
         .padding(28.dp),
         contentAlignment = Alignment.Center,
     ){

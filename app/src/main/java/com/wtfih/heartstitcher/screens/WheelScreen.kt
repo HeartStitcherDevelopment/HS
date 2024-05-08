@@ -1,6 +1,5 @@
 package com.wtfih.heartstitcher.screens
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,7 +16,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.TextStyle
@@ -36,8 +34,6 @@ import com.wtfih.heartstitcher.spin_wheel.ExampleUnitTest.toColor
 import com.wtfih.heartstitcher.spin_wheel.SpinWheelComponent
 import com.wtfih.heartstitcher.spin_wheel.SpinWheelItem
 import com.wtfih.heartstitcher.spin_wheel.rememberSpinWheelState
-import com.wtfih.heartstitcher.ui.theme.Blue
-import com.wtfih.heartstitcher.ui.theme.Purple
 import kotlinx.collections.immutable.toPersistentList
 import kotlin.random.Random
 
@@ -46,9 +42,10 @@ import kotlin.random.Random
 fun WheelScreen(dataViewModel: UserDataViewModel = viewModel()) {
         val tasks =
         remember { dataViewModel.state.value["tasks"] as? MutableList<String> ?: mutableListOf() }
-    if (!Globals.taskFlag) {
-        Globals.taskFlag = true
-        HeartStitcherRouter.navigateTo(Screen.LoadingScreen2)}
+    if (!Globals.wheelFlag) {
+        Globals.wheelFlag = true
+        HeartStitcherRouter.navigateTo(Screen.LoadingScreen2)
+    }
         else{
             val colors1 = remember {
                 listOf(
@@ -103,7 +100,7 @@ fun WheelScreen(dataViewModel: UserDataViewModel = viewModel()) {
         Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(brush = Brush.horizontalGradient(listOf(Purple, Blue)))
+            //.background(brush = Brush.horizontalGradient(listOf(Purple, Blue)))
             .padding(28.dp)
         ) {
             Column(
@@ -126,6 +123,7 @@ fun WheelScreen(dataViewModel: UserDataViewModel = viewModel()) {
             }
         }
         SystemBackButtonHandler {
+            Globals.wheelFlag = false
             HeartStitcherRouter.navigateTo(Screen.TaskScreen)
         }
 }}

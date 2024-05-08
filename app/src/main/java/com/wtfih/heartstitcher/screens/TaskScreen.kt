@@ -1,7 +1,6 @@
 package com.wtfih.heartstitcher.screens
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -14,7 +13,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -31,8 +29,6 @@ import com.wtfih.heartstitcher.data.UserDataViewModel
 import com.wtfih.heartstitcher.navigation.HeartStitcherRouter
 import com.wtfih.heartstitcher.navigation.Screen
 import com.wtfih.heartstitcher.navigation.SystemBackButtonHandler
-import com.wtfih.heartstitcher.ui.theme.Blue
-import com.wtfih.heartstitcher.ui.theme.Purple
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -55,7 +51,7 @@ fun TaskScreen(dataViewModel: UserDataViewModel = viewModel()) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(brush = Brush.horizontalGradient(listOf(Purple, Blue)))
+                //.background(brush = Brush.horizontalGradient(listOf(Purple, Blue)))
                 .padding(28.dp)
         ) {
             Column(
