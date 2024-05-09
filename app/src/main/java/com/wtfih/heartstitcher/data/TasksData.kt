@@ -26,7 +26,7 @@ class UserDataViewModel: ViewModel(){
     }
     fun refresh()
     {
-        viewModelScope.launch {
+        viewModelScope.launch() {
             state.value = getUserFromFireStore()
         }
     }

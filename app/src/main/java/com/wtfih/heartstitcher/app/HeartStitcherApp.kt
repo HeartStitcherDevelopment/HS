@@ -7,17 +7,19 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.wtfih.heartstitcher.R
 import com.wtfih.heartstitcher.components.MusicPlayer
 import com.wtfih.heartstitcher.data.Globals.ButtonColor1
 import com.wtfih.heartstitcher.data.Globals.ButtonColor2
 import com.wtfih.heartstitcher.data.Globals.ColorTheme
-import com.wtfih.heartstitcher.data.Globals.flag
+import com.wtfih.heartstitcher.data.Globals.Font
 import com.wtfih.heartstitcher.data.ThemeData
 import com.wtfih.heartstitcher.data.UserDataViewModel
 import com.wtfih.heartstitcher.navigation.HeartStitcherRouter
@@ -38,29 +40,39 @@ import com.wtfih.heartstitcher.screens.WheelScreen
 import com.wtfih.heartstitcher.ui.theme.Anime1
 import com.wtfih.heartstitcher.ui.theme.Anime2
 import com.wtfih.heartstitcher.ui.theme.AnimeTheme
-import com.wtfih.heartstitcher.ui.theme.Baka1
-import com.wtfih.heartstitcher.ui.theme.Baka2
-import com.wtfih.heartstitcher.ui.theme.BakaTheme
 import com.wtfih.heartstitcher.ui.theme.Chill1
 import com.wtfih.heartstitcher.ui.theme.Chill2
 import com.wtfih.heartstitcher.ui.theme.ChillTheme
-import com.wtfih.heartstitcher.ui.theme.Default1
-import com.wtfih.heartstitcher.ui.theme.Default2
-import com.wtfih.heartstitcher.ui.theme.DefaultTheme
+import com.wtfih.heartstitcher.ui.theme.Forest1
+import com.wtfih.heartstitcher.ui.theme.Forest2
+import com.wtfih.heartstitcher.ui.theme.ForestTheme
 import com.wtfih.heartstitcher.ui.theme.Futuristic1
 import com.wtfih.heartstitcher.ui.theme.Futuristic2
 import com.wtfih.heartstitcher.ui.theme.FuturisticTheme
 import com.wtfih.heartstitcher.ui.theme.Japan1
 import com.wtfih.heartstitcher.ui.theme.Japan2
 import com.wtfih.heartstitcher.ui.theme.JapanTheme
+import com.wtfih.heartstitcher.ui.theme.Love1
+import com.wtfih.heartstitcher.ui.theme.Love2
+import com.wtfih.heartstitcher.ui.theme.LoveTheme
+import com.wtfih.heartstitcher.ui.theme.Psycho1
+import com.wtfih.heartstitcher.ui.theme.Psycho2
+import com.wtfih.heartstitcher.ui.theme.PsychoTheme
+import com.wtfih.heartstitcher.ui.theme.Rain1
+import com.wtfih.heartstitcher.ui.theme.Rain2
+import com.wtfih.heartstitcher.ui.theme.RainTheme
 import com.wtfih.heartstitcher.ui.theme.Retro1
 import com.wtfih.heartstitcher.ui.theme.Retro2
 import com.wtfih.heartstitcher.ui.theme.RetroTheme
 import com.wtfih.heartstitcher.ui.theme.Roblox1
 import com.wtfih.heartstitcher.ui.theme.Roblox2
 import com.wtfih.heartstitcher.ui.theme.RobloxTheme
-
-//MusicPlayer(loop = true, audioResourceId = R.raw.lights)
+import com.wtfih.heartstitcher.ui.theme.Solitude1
+import com.wtfih.heartstitcher.ui.theme.Solitude2
+import com.wtfih.heartstitcher.ui.theme.SolitudeTheme
+import com.wtfih.heartstitcher.ui.theme.Space1
+import com.wtfih.heartstitcher.ui.theme.Space2
+import com.wtfih.heartstitcher.ui.theme.SpaceTheme
 
 @Composable
 fun HeartSitcherApp(themeData: ThemeData = viewModel(), dataViewModel: UserDataViewModel = viewModel()){
@@ -68,37 +80,73 @@ fun HeartSitcherApp(themeData: ThemeData = viewModel(), dataViewModel: UserDataV
     Surface(modifier = Modifier.fillMaxSize())
     {
         if(login.value) {
-            val current = dataViewModel.state.value["theme"] as? Int ?: -1
-            if(flag){
-                flag = false
+            dataViewModel.refresh()
+            var flag = remember { mutableStateOf(true) }
+            val current = remember { dataViewModel.state.value["theme"] as Long }.toInt()
+            if(flag.value){
+                flag.value = false
                 themeData.setTheme(current)
                 when (current){
-                    0 -> {themeData.setColor1(Default1)
-                        themeData.setColor2(Default2) }
-                    1 -> {themeData.setColor1(Japan1)
-                        themeData.setColor2(Japan2)}
-                    2 -> {themeData.setColor1(Futuristic1)
-                        themeData.setColor2(Futuristic2)}
-                    3 -> {themeData.setColor1(Chill1)
-                        themeData.setColor2(Chill2)}
-                    4 -> {themeData.setColor1(Anime1)
-                        themeData.setColor2(Anime2)}
-                    5 -> {themeData.setColor1(Retro1)
-                        themeData.setColor2(Retro2)}
-                    6 -> {themeData.setColor1(Roblox1)
+                    0 -> {themeData.setColor(RainTheme)
+                        themeData.setColor1(Rain1)
+                        themeData.setColor2(Rain2)
+                        themeData.setFont(Font(R.font.rain_font))}
+                    1 -> {themeData.setColor(JapanTheme)
+                        themeData.setColor1(Japan1)
+                        themeData.setColor2(Japan2)
+                        themeData.setFont(Font(R.font.japan_font))}
+                    2 -> {themeData.setColor(FuturisticTheme)
+                        themeData.setColor1(Futuristic1)
+                        themeData.setColor2(Futuristic2)
+                        themeData.setFont(Font(R.font.futuristic_font))}
+                    3 -> {themeData.setColor(ChillTheme)
+                        themeData.setColor1(Chill1)
+                        themeData.setColor2(Chill2)
+                        themeData.setFont(Font(R.font.chill_font))}
+                    4 -> {themeData.setColor(AnimeTheme)
+                        themeData.setColor1(Anime1)
+                        themeData.setColor2(Anime2)
+                        themeData.setFont(Font(R.font.anime_font))}
+                    5 -> {themeData.setColor(RetroTheme)
+                        themeData.setColor1(Retro1)
+                        themeData.setColor2(Retro2)
+                        themeData.setFont(Font(R.font.retro_font))}
+                    6 -> {themeData.setColor(SolitudeTheme)
+                        themeData.setColor1(Solitude1)
+                        themeData.setColor2(Solitude2)
+                        themeData.setFont(Font(R.font.solitude_font))}
+                    7 -> {themeData.setColor(SpaceTheme)
+                        themeData.setColor1(Space1)
+                        themeData.setColor2(Space2)
+                        themeData.setFont(Font(R.font.space_font))}
+                    8 -> {themeData.setColor(LoveTheme)
+                        themeData.setColor1(Love1)
+                        themeData.setColor2(Love2)
+                        themeData.setFont(Font(R.font.love_font))}
+                    9 -> {themeData.setColor(ForestTheme)
+                        themeData.setColor1(Forest1)
+                        themeData.setColor2(Forest2)
+                        themeData.setFont(Font(R.font.forest_font))}
+                    10 -> {themeData.setColor(PsychoTheme)
+                        themeData.setColor1(Psycho1)
+                        themeData.setColor2(Psycho2)
+                        themeData.setFont(Font(R.font.psycho_font))}
+                    11 -> {themeData.setColor(RobloxTheme)
+                        themeData.setColor1(Roblox1)
                         themeData.setColor2(Roblox2)}
-                    7 -> {themeData.setColor1(Baka1)
-                        themeData.setColor2(Baka2)}
+                    else -> {themeData.setColor(RainTheme)
+                        themeData.setColor1(Rain1)
+                        themeData.setColor2(Rain2)
+                        themeData.setFont(Font(R.font.rain_font))}
                 }
             }
-
                 val th = remember { derivedStateOf { themeData.theme.value } }
                 when (th.value) {
-
                     0 -> {
-                        ColorTheme = DefaultTheme
-                        ButtonColor1 = Default1
-                        ButtonColor2 = Default2
+                        ColorTheme = RainTheme
+                        ButtonColor1 = Rain1
+                        ButtonColor2 = Rain2
+                        Font = Font(R.font.rain_font)
                         MusicPlayer(loop = true, audioResourceId = R.raw.lights)
                         Image(
                             painter = painterResource(id = R.drawable.rainy_background),
@@ -107,11 +155,11 @@ fun HeartSitcherApp(themeData: ThemeData = viewModel(), dataViewModel: UserDataV
                             contentScale = ContentScale.FillBounds
                         )
                     }
-
                     1 -> {
                         ColorTheme = JapanTheme
                         ButtonColor1 = Japan1
                         ButtonColor2 = Japan2
+                        Font = Font(R.font.japan_font)
                         MusicPlayer(loop = true, audioResourceId = R.raw.hanamura)
                         Image(
                             painter = painterResource(id = R.drawable.japanese_background),
@@ -120,11 +168,11 @@ fun HeartSitcherApp(themeData: ThemeData = viewModel(), dataViewModel: UserDataV
                             contentScale = ContentScale.FillBounds
                         )
                     }
-
                     2 -> {
                         ColorTheme = FuturisticTheme
                         ButtonColor1 = Futuristic1
                         ButtonColor2 = Futuristic2
+                        Font = Font(R.font.futuristic_font)
                         MusicPlayer(loop = true, audioResourceId = R.raw.make_this_right)
                         Image(
                             painter = painterResource(id = R.drawable.futuristic_background),
@@ -133,11 +181,11 @@ fun HeartSitcherApp(themeData: ThemeData = viewModel(), dataViewModel: UserDataV
                             contentScale = ContentScale.FillBounds
                         )
                     }
-
                     3 -> {
                         ColorTheme = ChillTheme
                         ButtonColor1 = Chill1
                         ButtonColor2 = Chill2
+                        Font = Font(R.font.chill_font)
                         MusicPlayer(loop = true, audioResourceId = R.raw.slow_boat)
                         Image(
                             painter = painterResource(id = R.drawable.chill_background),
@@ -146,11 +194,11 @@ fun HeartSitcherApp(themeData: ThemeData = viewModel(), dataViewModel: UserDataV
                             contentScale = ContentScale.FillBounds
                         )
                     }
-
                     4 -> {
                         ColorTheme = AnimeTheme
                         ButtonColor1 = Anime1
                         ButtonColor2 = Anime2
+                        Font = Font(R.font.anime_font)
                         MusicPlayer(loop = true, audioResourceId = R.raw.mikichan)
                         Image(
                             painter = painterResource(id = R.drawable.anime_girl_background),
@@ -159,11 +207,11 @@ fun HeartSitcherApp(themeData: ThemeData = viewModel(), dataViewModel: UserDataV
                             contentScale = ContentScale.FillBounds
                         )
                     }
-
                     5 -> {
                         ColorTheme = RetroTheme
                         ButtonColor1 = Retro1
                         ButtonColor2 = Retro2
+                        Font = Font(R.font.retro_font)
                         MusicPlayer(loop = true, audioResourceId = R.raw.howling_grotto)
                         Image(
                             painter = painterResource(id = R.drawable.retro_background),
@@ -172,8 +220,72 @@ fun HeartSitcherApp(themeData: ThemeData = viewModel(), dataViewModel: UserDataV
                             contentScale = ContentScale.FillBounds
                         )
                     }
-
                     6 -> {
+                        ColorTheme = SolitudeTheme
+                        ButtonColor1 = Solitude1
+                        ButtonColor2 = Solitude2
+                        Font = Font(R.font.solitude_font)
+                        MusicPlayer(loop = true, audioResourceId = R.raw.solo_made)
+                        Image(
+                            painter = painterResource(id = R.drawable.solitude_background),
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.FillBounds
+                        )
+                    }
+                    7 -> {
+                        ColorTheme = SpaceTheme
+                        ButtonColor1 = Space1
+                        ButtonColor2 = Space2
+                        Font = Font(R.font.space_font)
+                        MusicPlayer(loop = true, audioResourceId = R.raw.purple_eyes)
+                        Image(
+                            painter = painterResource(id = R.drawable.space_background),
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.FillBounds
+                        )
+                        }
+                    8 -> {
+                        ColorTheme = LoveTheme
+                        ButtonColor1 = Love1
+                        ButtonColor2 = Love2
+                        Font = Font(R.font.love_font)
+                        MusicPlayer(loop = true, audioResourceId = R.raw.love)
+                        Image(
+                            painter = painterResource(id = R.drawable.love_background),
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.FillBounds
+                        )
+                    }
+                    9 -> {
+                        ColorTheme = ForestTheme
+                        ButtonColor1 = Forest1
+                        ButtonColor2 = Forest2
+                        Font = Font(R.font.forest_font)
+                        MusicPlayer(loop = true, audioResourceId = R.raw.flower_maiden)
+                        Image(
+                            painter = painterResource(id = R.drawable.forest_background),
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.FillBounds
+                        )
+                    }
+                    10 -> {
+                        ColorTheme = PsychoTheme
+                        ButtonColor1 = Psycho1
+                        ButtonColor2 = Psycho2
+                        Font = Font(R.font.psycho_font)
+                        MusicPlayer(loop = true, audioResourceId = R.raw.psycho_theme)
+                        Image(
+                            painter = painterResource(id = R.drawable.psycho_background),
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.FillBounds
+                        )
+                    }
+                    11 -> {
                         ColorTheme = RobloxTheme
                         ButtonColor1 = Roblox1
                         ButtonColor2 = Roblox2
@@ -185,23 +297,11 @@ fun HeartSitcherApp(themeData: ThemeData = viewModel(), dataViewModel: UserDataV
                             contentScale = ContentScale.FillBounds
                         )
                     }
-
-                    7 -> {
-                        ColorTheme = BakaTheme
-                        ButtonColor1 = Baka1
-                        ButtonColor2 = Baka2
-                        MusicPlayer(loop = true, audioResourceId = R.raw.mikichan)
-                        Image(
-                            painter = painterResource(id = R.drawable.baka_background),
-                            contentDescription = null,
-                            modifier = Modifier.fillMaxSize(),
-                            contentScale = ContentScale.FillBounds
-                        )
-                    }
                     else -> {
-                        ColorTheme = DefaultTheme
-                        ButtonColor1 = Default1
-                        ButtonColor2 = Default2
+                        ColorTheme = RainTheme
+                        ButtonColor1 = Rain1
+                        ButtonColor2 = Rain2
+                        Font = Font(R.font.rain_font)
                         MusicPlayer(loop = true, audioResourceId = R.raw.lights)
                         Image(
                             painter = painterResource(id = R.drawable.rainy_background),

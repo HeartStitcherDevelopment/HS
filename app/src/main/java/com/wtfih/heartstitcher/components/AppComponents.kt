@@ -40,8 +40,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -66,9 +66,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.font.toFontFamily
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -89,6 +91,7 @@ import com.wtfih.heartstitcher.data.CheerupsDataViewModel
 import com.wtfih.heartstitcher.data.Globals.ButtonColor1
 import com.wtfih.heartstitcher.data.Globals.ButtonColor2
 import com.wtfih.heartstitcher.data.Globals.ColorTheme
+import com.wtfih.heartstitcher.data.Globals.Font
 import com.wtfih.heartstitcher.navigation.HeartStitcherRouter
 import com.wtfih.heartstitcher.navigation.Screen
 import com.wtfih.heartstitcher.ui.theme.BGColor
@@ -103,7 +106,7 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun NormalTextComponent(value:String){
+fun NormalTextComponent(value:String, fontResource: Font = Font){
     Text(
         text = value,
         modifier = Modifier
@@ -115,12 +118,13 @@ fun NormalTextComponent(value:String){
             fontStyle = FontStyle.Normal
         )
         ,color = ColorTheme,
-        textAlign = TextAlign.Center
+        textAlign = TextAlign.Center,
+        fontFamily = fontResource.toFontFamily()
     )
 }
 
 @Composable
-fun HeadingTextComponent(value:String, c: Color = ColorTheme){
+fun HeadingTextComponent(value:String, c: Color = ColorTheme, fontResource: Font = Font){
     Text(
         text = value,
         modifier = Modifier
@@ -132,7 +136,8 @@ fun HeadingTextComponent(value:String, c: Color = ColorTheme){
             fontStyle = FontStyle.Normal
         )
         ,color = c,
-        textAlign = TextAlign.Center
+        textAlign = TextAlign.Center,
+        fontFamily = fontResource.toFontFamily()
     )
 }
 
@@ -372,7 +377,8 @@ fun ButtonComponent(value: String, onButtonClicked : () -> Unit, isEnabled: Bool
             Text(text = value,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                color = ColorTheme)
+                color = ColorTheme,
+                fontFamily = Font.toFontFamily())
         }
     }
 }
@@ -404,9 +410,10 @@ fun SmallButtonComponent(width: Int = 64,value: String, onButtonClicked : () -> 
             contentAlignment = Alignment.Center
         ){
             Text(text = value,
-                fontSize = 13.sp,
+                fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
-                color = ColorTheme)
+                color = ColorTheme,
+                fontFamily = Font.toFontFamily())
         }
     }
 }
@@ -492,7 +499,8 @@ fun UnderLinedTextComponent(value:String){
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun IconComponent(value: String, onIconClicked : () -> Unit, isEnabled: Boolean = true, painterResource: Painter,
-                  color: Color = ColorTheme, color1: Color = ButtonColor1, color2: Color = ButtonColor2){
+                  color: Color = ColorTheme, color1: Color = ButtonColor1, color2: Color = ButtonColor2,
+                  fontResource: Font = Font){
     androidx.compose.material3.
     Button(modifier = Modifier
         .heightIn(125.dp)
@@ -518,13 +526,14 @@ fun IconComponent(value: String, onIconClicked : () -> Unit, isEnabled: Boolean 
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Icon(painter = painterResource, contentDescription = "",modifier = Modifier.size(75.dp),tint = ColorTheme)
+                Icon(painter = painterResource, contentDescription = "",modifier = Modifier.size(75.dp),tint = color)
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
                     text = value,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
-                    color = color
+                    color = color,
+                    fontFamily = fontResource.toFontFamily()
                 )
         }
         }
@@ -601,7 +610,7 @@ fun SpinButtonComponent(result: String, onButtonClicked: () -> Unit, isEnabled: 
                 text = stringResource(id = R.string.SPIN),
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold,
-                fontFamily = FontFamily.Monospace,
+                fontFamily = Font.toFontFamily(),
                 color = ColorTheme
             )
         }
@@ -617,7 +626,8 @@ fun SpinButtonComponent(result: String, onButtonClicked: () -> Unit, isEnabled: 
         AlertDialog(
             onDismissRequest = { showDialog = false },
             containerColor = ButtonColor1,
-            title = { Text(text = stringResource(id = R.string.winner), textAlign = TextAlign.Center, color = ColorTheme, fontWeight = FontWeight.Bold)},
+            title = { Text(text = stringResource(id = R.string.winner), textAlign = TextAlign.Center,
+                color = ColorTheme, fontWeight = FontWeight.Bold, fontFamily = Font.toFontFamily()) },
             text = {
                 Text(
                     text = result,
@@ -628,7 +638,8 @@ fun SpinButtonComponent(result: String, onButtonClicked: () -> Unit, isEnabled: 
                         .padding(end = 8.dp),
                     overflow = TextOverflow.Visible,
                     maxLines = Int.MAX_VALUE,
-                    color = ColorTheme
+                    color = ColorTheme,
+                    fontFamily = Font.toFontFamily()
                 )
             },
             confirmButton = {
@@ -652,7 +663,7 @@ fun SpinButtonComponent(result: String, onButtonClicked: () -> Unit, isEnabled: 
                             ),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(stringResource(id = R.string.ok),color = ColorTheme)
+                        Text(stringResource(id = R.string.ok),color = ColorTheme, fontFamily = Font.toFontFamily())
                     }
                 }
             }
@@ -663,7 +674,8 @@ fun SpinButtonComponent(result: String, onButtonClicked: () -> Unit, isEnabled: 
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun CheerUpButtonComponent(dataViewModel: CheerupsDataViewModel = viewModel(), value: String, isEnabled: Boolean = true, painterResource: Painter,
-                           color: Color = ColorTheme, color1: Color = ButtonColor1, color2: Color = ButtonColor2) {
+                           color: Color = ColorTheme, color1: Color = ButtonColor1, color2: Color = ButtonColor2,
+                           fontResource: Font = Font) {
     var notificationText by remember { mutableStateOf("") }
     var showDialog by remember { mutableStateOf(false) }
     val cheerupsHashMap: HashMap<String, String> = dataViewModel.state.value
@@ -706,7 +718,8 @@ fun CheerUpButtonComponent(dataViewModel: CheerupsDataViewModel = viewModel(), v
                     text = value,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
-                    color = color
+                    color = color,
+                    fontFamily = fontResource.toFontFamily()
                 )
             }
         }
@@ -714,7 +727,8 @@ fun CheerUpButtonComponent(dataViewModel: CheerupsDataViewModel = viewModel(), v
     if (showDialog) {
         AlertDialog(
             onDismissRequest = { showDialog = false},
-            title = { Text(text = "Your thought of the day!", textAlign = TextAlign.Center,color = color,fontWeight = FontWeight.Bold) },
+            title = { Text(text = "Your thought of the day!", textAlign = TextAlign.Center,
+                color = color,fontWeight = FontWeight.Bold, fontFamily = fontResource.toFontFamily()) },
             text = {
                 Text(text = randomString,
                     fontSize = 20.sp,
@@ -725,7 +739,8 @@ fun CheerUpButtonComponent(dataViewModel: CheerupsDataViewModel = viewModel(), v
                     overflow = TextOverflow.Visible,
                     softWrap = true,
                     maxLines = Int.MAX_VALUE,
-                    color = color
+                    color = color,
+                    fontFamily = fontResource.toFontFamily()
                     )
             },
             containerColor = color1,
@@ -749,7 +764,7 @@ fun CheerUpButtonComponent(dataViewModel: CheerupsDataViewModel = viewModel(), v
                         ),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(stringResource(id = R.string.thanks), color = color)
+                    Text(stringResource(id = R.string.thanks), color = color,fontFamily = fontResource.toFontFamily())
                 }
                 }
             }
@@ -792,7 +807,8 @@ fun TaskComponent(item: String, onDeleteClicked: () -> Unit) {
                     .padding(end = 8.dp),
                 overflow = TextOverflow.Visible,
                 softWrap = true,
-                color = ColorTheme
+                color = ColorTheme,
+                fontFamily = Font.toFontFamily()
             )
             SmallButtonComponent(
                 value = stringResource(id = R.string.delete),
@@ -812,15 +828,24 @@ fun TaskText(tasks: MutableList<String>) {
     val id = Firebase.auth.currentUser!!.uid
     var soundeffect by remember { mutableStateOf(false) }
     Column(modifier = Modifier.fillMaxSize()) {
-        TextField(
+        OutlinedTextField(
             value = textValue,
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedTextColor = ColorTheme,
+                unfocusedTextColor = ColorTheme,
+                cursorColor = ColorTheme,
+                focusedBorderColor = ColorTheme,
+                unfocusedBorderColor = ColorTheme,
+                disabledBorderColor = ButtonColor2,
+            ),
             onValueChange = { textValue = it },
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text, imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions {
                 localFocusManager.clearFocus()
             },
-            maxLines = 1
+            maxLines = 1,
+            shape = RoundedCornerShape(10.dp)
         )
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -920,7 +945,8 @@ fun ThemeIcon(
     onIconClicked: () -> Unit,
     isEnabled: Boolean = true,
     painterResource: Int,
-    textColor: Color = ColorTheme
+    textColor: Color = ColorTheme,
+    fontResource: Font = Font
 ) {
     Box(
         modifier = Modifier
@@ -954,7 +980,8 @@ fun ThemeIcon(
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center,
-                        color = textColor
+                        color = textColor,
+                        fontFamily = fontResource.toFontFamily()
                     )
                 }
             }

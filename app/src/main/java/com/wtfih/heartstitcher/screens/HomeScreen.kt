@@ -26,18 +26,20 @@ import com.wtfih.heartstitcher.R
 import com.wtfih.heartstitcher.components.CheerUpButtonComponent
 import com.wtfih.heartstitcher.components.HeadingTextComponent
 import com.wtfih.heartstitcher.components.IconComponent
-import com.wtfih.heartstitcher.components.PanicButtonComponent
 import com.wtfih.heartstitcher.data.SignUpViewModel
 import com.wtfih.heartstitcher.data.ThemeData
+import com.wtfih.heartstitcher.data.UserDataViewModel
 import com.wtfih.heartstitcher.navigation.HeartStitcherRouter
 import com.wtfih.heartstitcher.navigation.Screen
 
 @Composable
-fun HomeScreen(signUpViewModel: SignUpViewModel = SignUpViewModel(),themeData: ThemeData = viewModel()) {
+fun HomeScreen(signUpViewModel: SignUpViewModel = SignUpViewModel(),themeData: ThemeData = viewModel(), dataViewModel: UserDataViewModel = viewModel()) {
     themeData.LogInFLag()
     val color by remember {  derivedStateOf { themeData.color.value } }
     val color1 by remember {  derivedStateOf { themeData.color1.value } }
     val color2 by remember {  derivedStateOf { themeData.color2.value } }
+    val font by remember { derivedStateOf { themeData.font.value }}
+    val name =  dataViewModel.state.value["first"].toString()
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -46,23 +48,26 @@ fun HomeScreen(signUpViewModel: SignUpViewModel = SignUpViewModel(),themeData: T
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize(),
-        ) {
+        ) {item {
+            Spacer(modifier = Modifier.height(20.dp))
+        }
+
             item {
-                HeadingTextComponent(value = stringResource(id = R.string.home), c = color)
+                HeadingTextComponent(value = "Welcome back,\n $name!", c = color, fontResource = font)
             }
 
             item {
-                Spacer(modifier = Modifier.height(30.dp))
+                Spacer(modifier = Modifier.height(20.dp))
             }
 
-            item {
+            /*item {
                 PanicButtonComponent(
                     onButtonClicked = {
                         HeartStitcherRouter.navigateTo(Screen.PanicScreen)
                     },
                     isEnabled = true
                 )
-            }
+            }*/
 
             item {
                 Spacer(modifier = Modifier.height(30.dp))
@@ -80,9 +85,8 @@ fun HomeScreen(signUpViewModel: SignUpViewModel = SignUpViewModel(),themeData: T
                             onIconClicked = { HeartStitcherRouter.navigateTo(Screen.NotepadScreen) },
                             isEnabled = true,
                             painterResource(id = R.drawable.notepad),
-                            color = color,
-                            color1 = color1,
-                            color2 = color2
+                            color = color, color1 = color1, color2 = color2,
+                            fontResource = font
                         )
                         Spacer(modifier = Modifier.height(20.dp))
                         IconComponent(
@@ -91,18 +95,16 @@ fun HomeScreen(signUpViewModel: SignUpViewModel = SignUpViewModel(),themeData: T
                                 HeartStitcherRouter.navigateTo(Screen.NutritionScreen) },
                             isEnabled = true,
                             painterResource(id = R.drawable.nutrition),
-                            color = color,
-                            color1 = color1,
-                            color2 = color2
+                            color = color, color1 = color1, color2 = color2,
+                            fontResource = font
                         )
                         Spacer(modifier = Modifier.height(20.dp))
                         CheerUpButtonComponent(
                             value = stringResource(id = R.string.cheer),
                             isEnabled = true,
                             painterResource = painterResource(id = R.drawable.cheer),
-                            color = color,
-                            color1 = color1,
-                            color2 = color2
+                            color = color, color1 = color1, color2 = color2,
+                            fontResource = font
                         )
                         Spacer(modifier = Modifier.height(20.dp))
                         IconComponent(
@@ -111,9 +113,8 @@ fun HomeScreen(signUpViewModel: SignUpViewModel = SignUpViewModel(),themeData: T
                                 HeartStitcherRouter.navigateTo(Screen.SettingsScreen) },
                             isEnabled = true,
                             painterResource(id = R.drawable.settings),
-                            color = color,
-                            color1 = color1,
-                            color2 = color2
+                            color = color, color1 = color1, color2 = color2,
+                            fontResource = font
                         )
                     }
 
@@ -125,9 +126,8 @@ fun HomeScreen(signUpViewModel: SignUpViewModel = SignUpViewModel(),themeData: T
                             onIconClicked = { HeartStitcherRouter.navigateTo(Screen.TaskScreen) },
                             isEnabled = true,
                             painterResource(id = R.drawable.wheel),
-                            color = color,
-                            color1 = color1,
-                            color2 = color2
+                            color = color, color1 = color1, color2 = color2,
+                            fontResource = font
                         )
                         Spacer(modifier = Modifier.height(20.dp))
                         IconComponent(
@@ -136,9 +136,8 @@ fun HomeScreen(signUpViewModel: SignUpViewModel = SignUpViewModel(),themeData: T
                                 HeartStitcherRouter.navigateTo(Screen.SleepScreen) },
                             isEnabled = true,
                             painterResource(id = R.drawable.sleep),
-                            color = color,
-                            color1 = color1,
-                            color2 = color2
+                            color = color, color1 = color1, color2 = color2,
+                            fontResource = font
                         )
                         Spacer(modifier = Modifier.height(20.dp))
                         IconComponent(
@@ -147,20 +146,18 @@ fun HomeScreen(signUpViewModel: SignUpViewModel = SignUpViewModel(),themeData: T
                                 HeartStitcherRouter.navigateTo(Screen.AchievementsScreen) },
                             isEnabled = true,
                             painterResource(id = R.drawable.achievements),
-                            color = color,
-                            color1 = color1,
-                            color2 = color2
+                            color = color, color1 = color1, color2 = color2,
+                            fontResource = font
                         )
                         Spacer(modifier = Modifier.height(20.dp))
                         IconComponent(
                             value = stringResource(id = R.string.logout),
-                            onIconClicked = {themeData.LogInFLag()
+                            onIconClicked = {themeData.logOutFlag()
                                 signUpViewModel.logout() },
                             isEnabled = true,
                             painterResource(id = R.drawable.logout),
-                            color = color,
-                            color1 = color1,
-                            color2 = color2
+                            color = color, color1 = color1, color2 = color2,
+                            fontResource = font
                         )
                     }
                 }

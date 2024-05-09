@@ -147,4 +147,9 @@
     <string name="music">Music</string>
     <string name="sounds">Sounds</string>
     <string name="rain">Rain</string>
+    <string name="solitude">Solitude</string>
+    <string name="space">Space</string>
+    <string name="love">Love</string>
+    <string name="forest">Forest</string>
+    <string name="psycho">Psycho</string>
 </resources>

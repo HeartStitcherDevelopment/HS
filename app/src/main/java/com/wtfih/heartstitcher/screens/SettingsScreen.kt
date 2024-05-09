@@ -21,6 +21,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.toFontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -38,27 +40,36 @@ import com.wtfih.heartstitcher.navigation.SystemBackButtonHandler
 import com.wtfih.heartstitcher.ui.theme.Anime1
 import com.wtfih.heartstitcher.ui.theme.Anime2
 import com.wtfih.heartstitcher.ui.theme.AnimeTheme
-import com.wtfih.heartstitcher.ui.theme.Baka1
-import com.wtfih.heartstitcher.ui.theme.Baka2
-import com.wtfih.heartstitcher.ui.theme.BakaTheme
 import com.wtfih.heartstitcher.ui.theme.Chill1
 import com.wtfih.heartstitcher.ui.theme.Chill2
 import com.wtfih.heartstitcher.ui.theme.ChillTheme
-import com.wtfih.heartstitcher.ui.theme.Default1
-import com.wtfih.heartstitcher.ui.theme.Default2
-import com.wtfih.heartstitcher.ui.theme.DefaultTheme
+import com.wtfih.heartstitcher.ui.theme.Forest1
+import com.wtfih.heartstitcher.ui.theme.Forest2
+import com.wtfih.heartstitcher.ui.theme.ForestTheme
 import com.wtfih.heartstitcher.ui.theme.Futuristic1
 import com.wtfih.heartstitcher.ui.theme.Futuristic2
 import com.wtfih.heartstitcher.ui.theme.FuturisticTheme
 import com.wtfih.heartstitcher.ui.theme.Japan1
 import com.wtfih.heartstitcher.ui.theme.Japan2
 import com.wtfih.heartstitcher.ui.theme.JapanTheme
+import com.wtfih.heartstitcher.ui.theme.Love1
+import com.wtfih.heartstitcher.ui.theme.Love2
+import com.wtfih.heartstitcher.ui.theme.LoveTheme
+import com.wtfih.heartstitcher.ui.theme.Psycho1
+import com.wtfih.heartstitcher.ui.theme.Psycho2
+import com.wtfih.heartstitcher.ui.theme.PsychoTheme
+import com.wtfih.heartstitcher.ui.theme.Rain1
+import com.wtfih.heartstitcher.ui.theme.Rain2
+import com.wtfih.heartstitcher.ui.theme.RainTheme
 import com.wtfih.heartstitcher.ui.theme.Retro1
 import com.wtfih.heartstitcher.ui.theme.Retro2
 import com.wtfih.heartstitcher.ui.theme.RetroTheme
-import com.wtfih.heartstitcher.ui.theme.Roblox1
-import com.wtfih.heartstitcher.ui.theme.Roblox2
-import com.wtfih.heartstitcher.ui.theme.RobloxTheme
+import com.wtfih.heartstitcher.ui.theme.Solitude1
+import com.wtfih.heartstitcher.ui.theme.Solitude2
+import com.wtfih.heartstitcher.ui.theme.SolitudeTheme
+import com.wtfih.heartstitcher.ui.theme.Space1
+import com.wtfih.heartstitcher.ui.theme.Space2
+import com.wtfih.heartstitcher.ui.theme.SpaceTheme
 
 
 @Composable
@@ -68,10 +79,10 @@ fun SettingsScreen(themeData: ThemeData = viewModel()) {
     val color by remember {  derivedStateOf { themeData.color} }
     val color1 by remember {  derivedStateOf { themeData.color1} }
     val color2 by remember {  derivedStateOf { themeData.color2} }
+    val font by remember { derivedStateOf { themeData.font} }
     Box(
         modifier = Modifier
             .fillMaxSize()
-            //.background(brush = Brush.horizontalGradient(listOf(Purple, Blue)))
             .padding(28.dp)
     ) {
         Column(
@@ -88,8 +99,9 @@ fun SettingsScreen(themeData: ThemeData = viewModel()) {
                 Text(text = "Themes",
                     modifier = Modifier.padding(8.dp),
                     fontSize = 25.sp,
-                    color = color.value)
-
+                    color = color.value,
+                    fontFamily = font.value.toFontFamily()
+                )
                 Spacer(modifier = Modifier.width(5.dp))
                 Divider(
                     modifier = Modifier
@@ -107,11 +119,13 @@ fun SettingsScreen(themeData: ThemeData = viewModel()) {
                     value = stringResource(id = R.string.rain),
                     onIconClicked = { themeData.setTheme(0);
                         db.collection("users").document(id).update("theme", 0)
-                                    themeData.setColor(DefaultTheme)
-                            themeData.setColor1(Default1)
-                            themeData.setColor2(Default2)},
+                                    themeData.setColor(RainTheme)
+                            themeData.setColor1(Rain1)
+                            themeData.setColor2(Rain2)
+                            themeData.setFont(Font(R.font.rain_font))},
                     painterResource = R.drawable.rainy_background,
-                    textColor = DefaultTheme)
+                    textColor = RainTheme,
+                    fontResource = Font(R.font.rain_font))
                     Spacer(modifier = Modifier.width(5.dp))}
                 item{ ThemeIcon(
                     value = stringResource(id = R.string.japan),
@@ -119,9 +133,12 @@ fun SettingsScreen(themeData: ThemeData = viewModel()) {
                         db.collection("users").document(id).update("theme", 1);
                         themeData.setColor(JapanTheme)
                         themeData.setColor1(Japan1)
-                        themeData.setColor2(Japan2)},
+                        themeData.setColor2(Japan2)
+                        themeData.setFont(Font(R.font.japan_font))},
                     painterResource = R.drawable.japanese_background,
-                    textColor = JapanTheme)
+                    textColor = JapanTheme,
+                    fontResource = Font(R.font.japan_font)
+                )
                     Spacer(modifier = Modifier.width(5.dp))}
                 item{ ThemeIcon(
                     value = stringResource(id = R.string.future),
@@ -129,9 +146,11 @@ fun SettingsScreen(themeData: ThemeData = viewModel()) {
                         db.collection("users").document(id).update("theme", 2);
                         themeData.setColor(FuturisticTheme)
                         themeData.setColor1(Futuristic1)
-                        themeData.setColor2(Futuristic2)},
+                        themeData.setColor2(Futuristic2)
+                        themeData.setFont(Font(R.font.futuristic_font))},
                     painterResource = R.drawable.futuristic_background,
-                    textColor = FuturisticTheme)
+                    textColor = FuturisticTheme,
+                    fontResource = Font(R.font.futuristic_font))
                     Spacer(modifier = Modifier.width(5.dp))}
                 item{ ThemeIcon(
                     value = stringResource(id = R.string.chill),
@@ -139,9 +158,11 @@ fun SettingsScreen(themeData: ThemeData = viewModel()) {
                         db.collection("users").document(id).update("theme", 3);
                         themeData.setColor(ChillTheme)
                         themeData.setColor1(Chill1)
-                        themeData.setColor2(Chill2)},
+                        themeData.setColor2(Chill2)
+                        themeData.setFont(Font(R.font.chill_font))},
                     painterResource = R.drawable.chill_background,
-                    textColor = ChillTheme)
+                    textColor = ChillTheme,
+                    fontResource = Font(R.font.chill_font))
                     Spacer(modifier = Modifier.width(5.dp))}
                 item{ ThemeIcon(
                     value = stringResource(id = R.string.anime),
@@ -149,9 +170,11 @@ fun SettingsScreen(themeData: ThemeData = viewModel()) {
                         db.collection("users").document(id).update("theme", 4);
                         themeData.setColor(AnimeTheme)
                         themeData.setColor1(Anime1)
-                        themeData.setColor2(Anime2) },
+                        themeData.setColor2(Anime2)
+                        themeData.setFont(Font(R.font.anime_font))},
                     painterResource = R.drawable.anime_girl_background,
-                    textColor = AnimeTheme)
+                    textColor = AnimeTheme,
+                    fontResource = Font(R.font.anime_font))
                     Spacer(modifier = Modifier.width(5.dp))}
                 item{ ThemeIcon(
                     value = stringResource(id = R.string.retro),
@@ -159,30 +182,83 @@ fun SettingsScreen(themeData: ThemeData = viewModel()) {
                         db.collection("users").document(id).update("theme", 5);
                         themeData.setColor(RetroTheme)
                         themeData.setColor1(Retro1)
-                        themeData.setColor2(Retro2)},
+                        themeData.setColor2(Retro2)
+                        themeData.setFont(Font(R.font.retro_font))},
                     painterResource = R.drawable.retro_background,
-                    textColor = RetroTheme)
+                    textColor = RetroTheme,
+                    fontResource = Font(R.font.retro_font))
                     Spacer(modifier = Modifier.width(5.dp))}
                 item{ ThemeIcon(
-                    value = stringResource(id = R.string.roblox),
+                    value = stringResource(id = R.string.solitude),
                     onIconClicked = { themeData.setTheme(6);
                         db.collection("users").document(id).update("theme", 6);
+                        themeData.setColor(SolitudeTheme)
+                        themeData.setColor1(Solitude1)
+                        themeData.setColor2(Solitude2)
+                        themeData.setFont(Font(R.font.solitude_font))},
+                    painterResource = R.drawable.solitude_background,
+                    textColor = SolitudeTheme,
+                    fontResource = Font(R.font.solitude_font))
+                    Spacer(modifier = Modifier.width(5.dp))}
+                item{ ThemeIcon(
+                    value = stringResource(id = R.string.space),
+                    onIconClicked = { themeData.setTheme(7);
+                        db.collection("users").document(id).update("theme", 7);
+                        themeData.setColor(SpaceTheme)
+                        themeData.setColor1(Space1)
+                        themeData.setColor2(Space2)
+                        themeData.setFont(Font(R.font.space_font))},
+                    painterResource = R.drawable.space_background,
+                    textColor = SpaceTheme,
+                    fontResource = Font(R.font.space_font))
+                    Spacer(modifier = Modifier.width(5.dp))}
+                item{ ThemeIcon(
+                    value = stringResource(id = R.string.love),
+                    onIconClicked = { themeData.setTheme(8);
+                        db.collection("users").document(id).update("theme", 8);
+                        themeData.setColor(LoveTheme)
+                        themeData.setColor1(Love1)
+                        themeData.setColor2(Love2)
+                        themeData.setFont(Font(R.font.love_font))},
+                    painterResource = R.drawable.love_background,
+                    textColor = LoveTheme,
+                    fontResource = Font(R.font.love_font))
+                    Spacer(modifier = Modifier.width(5.dp))}
+                item{ ThemeIcon(
+                    value = stringResource(id = R.string.forest),
+                    onIconClicked = { themeData.setTheme(9);
+                        db.collection("users").document(id).update("theme", 9);
+                        themeData.setColor(ForestTheme)
+                        themeData.setColor1(Forest1)
+                        themeData.setColor2(Forest2)
+                        themeData.setFont(Font(R.font.forest_font))},
+                    painterResource = R.drawable.forest_background,
+                    textColor = ForestTheme,
+                    fontResource = Font(R.font.forest_font))
+                    Spacer(modifier = Modifier.width(5.dp))}
+                item{ ThemeIcon(
+                    value = stringResource(id = R.string.psycho),
+                    onIconClicked = { themeData.setTheme(10);
+                        db.collection("users").document(id).update("theme", 10);
+                        themeData.setColor(PsychoTheme)
+                        themeData.setColor1(Psycho1)
+                        themeData.setColor2(Psycho2)
+                        themeData.setFont(Font(R.font.psycho_font))},
+                    painterResource = R.drawable.psycho_background,
+                    textColor = PsychoTheme,
+                    fontResource = Font(R.font.psycho_font))
+                }
+                /*item{ ThemeIcon(
+                    value = stringResource(id = R.string.roblox),
+                    onIconClicked = { themeData.setTheme(11);
+                        db.collection("users").document(id).update("theme", 11);
                         themeData.setColor(RobloxTheme)
                         themeData.setColor1(Roblox1)
                         themeData.setColor2(Roblox2)},
                     painterResource = R.drawable.roblox_background,
-                    textColor = RobloxTheme)
-                    Spacer(modifier = Modifier.width(5.dp))}
-                item{ ThemeIcon(
-                    value = stringResource(id = R.string.baka),
-                    onIconClicked = { themeData.setTheme(7);
-                        db.collection("users").document(id).update("theme", 7);
-                        themeData.setColor(BakaTheme)
-                        themeData.setColor1(Baka1)
-                        themeData.setColor2(Baka2)},
-                    painterResource = R.drawable.baka_background,
-                    textColor = BakaTheme)
-                }
+                    textColor = RobloxTheme
+                )
+                    Spacer(modifier = Modifier.width(5.dp))}*/
             }
             Spacer(modifier = Modifier.height(20.dp))
             Row(
@@ -192,7 +268,9 @@ fun SettingsScreen(themeData: ThemeData = viewModel()) {
                 Text(text = "Audio",
                     modifier = Modifier.padding(8.dp),
                     fontSize = 25.sp,
-                    color = color.value)
+                    color = color.value,
+                    fontFamily = font.value.toFontFamily()
+                )
 
                 Spacer(modifier = Modifier.width(5.dp))
                 Divider(
@@ -239,7 +317,9 @@ fun SettingsScreen(themeData: ThemeData = viewModel()) {
                 Text(text = "Contacts",
                     modifier = Modifier.padding(8.dp),
                     fontSize = 25.sp,
-                    color = color.value)
+                    color = color.value,
+                    fontFamily = font.value.toFontFamily()
+                )
 
                 Spacer(modifier = Modifier.width(5.dp))
                 Divider(
