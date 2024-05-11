@@ -16,9 +16,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.toFontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -26,11 +26,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.wtfih.heartstitcher.R
 import com.wtfih.heartstitcher.components.SpinButtonComponent
 import com.wtfih.heartstitcher.data.Globals
+import com.wtfih.heartstitcher.data.Globals.ButtonColor1
+import com.wtfih.heartstitcher.data.Globals.ButtonColor2
+import com.wtfih.heartstitcher.data.Globals.ColorTheme
+import com.wtfih.heartstitcher.data.Globals.Font
 import com.wtfih.heartstitcher.data.UserDataViewModel
 import com.wtfih.heartstitcher.navigation.HeartStitcherRouter
 import com.wtfih.heartstitcher.navigation.Screen
 import com.wtfih.heartstitcher.navigation.SystemBackButtonHandler
-import com.wtfih.heartstitcher.spin_wheel.ExampleUnitTest.toColor
 import com.wtfih.heartstitcher.spin_wheel.SpinWheelComponent
 import com.wtfih.heartstitcher.spin_wheel.SpinWheelItem
 import com.wtfih.heartstitcher.spin_wheel.rememberSpinWheelState
@@ -49,21 +52,17 @@ fun WheelScreen(dataViewModel: UserDataViewModel = viewModel()) {
         else{
             val colors1 = remember {
                 listOf(
-                    "380048",
-                    "2B003D",
-                    "40004A",
-                    "590058",
-                    "730067"
-                ).map { it.toColor() }
+                    ButtonColor2,
+                    ButtonColor1,
+                    ButtonColor2
+                ).map { it }
             }
             val colors2 = remember {
                 listOf(
-                    "F9A114",
-                    "FD7D1B",
-                    "F9901A",
-                    "F6A019",
-                    "EFC017"
-                ).map { it.toColor() }
+                    ButtonColor1,
+                    ButtonColor2,
+                    ButtonColor1
+                ).map { it }
             }
             val items = remember {
                 List(tasks.size) { index ->
@@ -73,16 +72,16 @@ fun WheelScreen(dataViewModel: UserDataViewModel = viewModel()) {
                         colors = colors.toPersistentList()
                     ) {
                         Text(
-                            text = if (element.length >9) {
-                                "           ${element.take(9)}..."
+                            text = if (element.length >8) {
+                                "        ${element.take(8)}..."
                             } else {
-                                "         $element"},
+                                "        $element"},
                             modifier = Modifier
                                 .graphicsLayer {
                                     rotationZ = 90f
                                 },
-                            style = TextStyle(color = Color(0xFFFFFFFF), fontSize = 20.sp),
-                            textAlign = TextAlign.End
+                            style = TextStyle(color = ColorTheme, fontSize = 20.sp),
+                            textAlign = TextAlign.End, fontFamily = Font.toFontFamily()
                         )
                     }
 

@@ -3,11 +3,15 @@
 package com.wtfih.heartstitcher.components
 
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
 import android.media.MediaPlayer
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -55,6 +59,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -431,7 +436,8 @@ fun DividerTextComponent(){
         Text(text = stringResource(id = R.string.or),
             modifier = Modifier.padding(8.dp),
             fontSize = 18.sp,
-            color = ColorTheme)
+            color = ColorTheme,
+            fontFamily = Font.toFontFamily())
         Divider(modifier = Modifier
             .fillMaxWidth()
             .weight(1f),
@@ -488,11 +494,12 @@ fun UnderLinedTextComponent(value:String){
         style = TextStyle(
             fontSize = 16.sp,
             fontWeight = FontWeight.Normal,
-            fontStyle = FontStyle.Normal
+            fontStyle = FontStyle.Normal,
         ),
         color = ColorTheme,
         textAlign = TextAlign.Center,
-        textDecoration = TextDecoration.Underline
+        textDecoration = TextDecoration.Underline,
+        fontFamily = Font.toFontFamily()
     )
 }
 
@@ -658,7 +665,12 @@ fun SpinButtonComponent(result: String, onButtonClicked: () -> Unit, isEnabled: 
                             .fillMaxWidth()
                             .heightIn(40.dp)
                             .background(
-                                brush = Brush.horizontalGradient(listOf(ButtonColor1, ButtonColor2)),
+                                brush = Brush.horizontalGradient(
+                                    listOf(
+                                        ButtonColor1,
+                                        ButtonColor2
+                                    )
+                                ),
                                 shape = RoundedCornerShape(10.dp)
                             ),
                         contentAlignment = Alignment.Center
@@ -953,7 +965,7 @@ fun ThemeIcon(
             .height(198.dp)
             .width(132.dp) // Adjust width as needed
             .padding(16.dp),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Button(
             onClick = { onIconClicked.invoke() },
@@ -989,5 +1001,320 @@ fun ThemeIcon(
     }
 }
 
+@Composable
+fun AchievementPreview(
+    value: String,
+    onIconClicked: () -> Unit,
+    isEnabled: Boolean = true,
+    bitmap: Bitmap? = null,
+    onValueChange: (String) -> Unit,
+    labelValue: String
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(400.dp)
+            .padding(0.dp)
+            .border(
+                width = 3.dp,
+                color = ColorTheme,
+                shape = RoundedCornerShape(10.dp)
+            )
+            .background(
+                brush = Brush.horizontalGradient(listOf(ButtonColor1, ButtonColor2)),
+                shape = RoundedCornerShape(10.dp)
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(280.dp) // Adjust size as needed,
+                    .border(
+                        width = 3.dp,
+                        shape = RoundedCornerShape(10.dp),
+                        brush = Brush.horizontalGradient(
+                            colors = listOf(ColorTheme, ColorTheme),
+                            startX = 500f,
+                            endX = 1000f
+                        )
+                    )
+                    .clickable(enabled = isEnabled) { onIconClicked.invoke() } // Make only this Box clickable
+            ) {
+                if (bitmap != null) {
+                    Image(
+                        bitmap = bitmap.asImageBitmap(),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clip(RoundedCornerShape(10.dp)),
+                        contentScale = ContentScale.Crop
+                    )
+                } else {
+                    Icon(
+                        painter = painterResource(id = R.drawable.add_image),
+                        contentDescription = "",
+                        modifier = Modifier.fillMaxSize(),
+                        tint = ColorTheme
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(modifier = Modifier.fillMaxWidth()) {
+                Spacer(modifier = Modifier.width(17.dp))
+                TextFieldComponent(
+                    value = value,
+                    onValueChange = onValueChange,
+                    labelValue = labelValue
+                )
+                Spacer(modifier = Modifier.width(10.dp))
+            }
+        }
+    }
+}
 
 
+@Composable
+fun TextFieldComponent(
+    value: String,
+    onValueChange: (String) -> Unit,
+    labelValue: String,
+    width: Int = 300
+) {
+    OutlinedTextField(
+        value = value,
+        label = { Text(text = labelValue, fontSize = 15.sp,
+            color = ColorTheme,
+            fontFamily = Font.toFontFamily())},
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedTextColor = ColorTheme,
+            unfocusedTextColor = ColorTheme,
+            cursorColor = ColorTheme,
+            focusedBorderColor = ColorTheme,
+            unfocusedBorderColor = ColorTheme,
+            disabledBorderColor = ButtonColor2,
+        ),
+        onValueChange = onValueChange,
+        modifier = Modifier.width(width.dp),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text, imeAction = ImeAction.Done),
+        maxLines = 1,
+        shape = RoundedCornerShape(10.dp)
+    )
+}
+
+@Composable
+fun AchievementComponent(
+    value: String,
+    isEnabled: Boolean = true,
+    bitmap: Bitmap? = null
+) {
+    var showDialog by remember { mutableStateOf(false) }
+    Box(
+        modifier = Modifier
+            .width(150.dp)
+            .height(150.dp)
+            .padding(0.dp)
+            .border(
+                width = 3.dp,
+                color = ColorTheme,
+                shape = RoundedCornerShape(10.dp)
+            )
+            .background(
+                brush = Brush.horizontalGradient(listOf(ButtonColor1, ButtonColor2)),
+                shape = RoundedCornerShape(10.dp)
+            )
+            .clickable(enabled = isEnabled) { showDialog = true },// Make only this Box clickable,
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            if(bitmap != null){
+                Box(
+                    modifier = Modifier
+                        .size(110.dp) // Adjust size as needed,
+                        .border(
+                            width = 2.dp,
+                            shape = RoundedCornerShape(10.dp),
+                            brush = Brush.horizontalGradient(
+                                colors = listOf(ColorTheme, ColorTheme),
+                                startX = 500f,
+                                endX = 1000f
+                            )
+                        )
+                ) {
+                    Image(
+                        bitmap = bitmap.asImageBitmap(),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clip(RoundedCornerShape(10.dp)),
+                        contentScale = ContentScale.Crop
+                    )
+                }
+                Spacer(modifier = Modifier.height(6.dp))
+                Text(
+                    text = if (value.length > 15) {
+                        "${value.take(15)}..."
+                    } else {
+                        value
+                    },
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center,
+                    color = ColorTheme,
+                    fontFamily = Font.toFontFamily(),
+                    modifier = Modifier.width(130.dp)
+                )
+            }
+            else{
+                Text(
+                    text = if (value.length > 90) {
+                        "${value.take(90)}..."
+                    } else {
+                        value
+                    },
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center,
+                    color = ColorTheme,
+                    fontFamily = Font.toFontFamily(),
+                    modifier = Modifier.width(130.dp)
+                )
+            }
+        }
+    }
+    if(showDialog && bitmap == null)
+        AlertDialog(
+            onDismissRequest = { showDialog = false},
+            title = { Text(text = stringResource(id = R.string.memento), textAlign = TextAlign.Center,
+                color = ColorTheme,fontWeight = FontWeight.Bold, fontFamily = Font.toFontFamily() ) },
+            text = {
+                Text(
+                    text = value,
+                    fontSize = 20.sp,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .widthIn(40.dp)
+                        .padding(end = 8.dp),
+                    overflow = TextOverflow.Visible,
+                    softWrap = true,
+                    maxLines = Int.MAX_VALUE,
+                    color = ColorTheme,
+                    fontFamily = Font.toFontFamily()
+                )
+            },
+            containerColor = ButtonColor1,
+            modifier = Modifier.background(
+                color = ButtonColor1,
+                shape = RoundedCornerShape(10.dp)
+            ),
+            confirmButton = {
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = { showDialog = false },
+                    contentPadding = PaddingValues(),
+                    border = BorderStroke(2.dp, ColorTheme),
+                    colors = ButtonDefaults.buttonColors(Color.Transparent),
+                    shape = RoundedCornerShape(10.dp),
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(40.dp)
+                            .background(
+                                brush = Brush.horizontalGradient(
+                                    listOf(
+                                        ButtonColor1,
+                                        ButtonColor2
+                                    )
+                                ),
+                                shape = RoundedCornerShape(10.dp)
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(stringResource(id = R.string.okay), color = ColorTheme,fontFamily = Font.toFontFamily())
+                    }
+                }
+            }
+        )
+    else if (showDialog && bitmap != null) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text(text = stringResource(id = R.string.memento), textAlign = TextAlign.Center, color = ColorTheme, fontWeight = FontWeight.Bold, fontFamily = Font.toFontFamily()) },
+            text = {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.padding(vertical = 4.dp)
+                ) {Box(
+                    modifier = Modifier
+                        .size(200.dp)
+                        .border(
+                            width = 3.dp,
+                            color = ColorTheme, // Border color
+                            shape = RoundedCornerShape(10.dp)
+                        )
+                ) {
+                    Image(
+                        bitmap = bitmap.asImageBitmap(),
+                        contentDescription = null,
+                        modifier = Modifier.size(220.dp).clip(RoundedCornerShape(10.dp)),
+                        contentScale = ContentScale.Crop
+                    )}
+                    Spacer(modifier = Modifier.height(25.dp))
+                    Text(
+                        text = value,
+                        fontSize = 20.sp,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(horizontal = 16.dp)
+                            .fillMaxWidth(),
+                        overflow = TextOverflow.Visible,
+                        softWrap = true,
+                        maxLines = Int.MAX_VALUE,
+                        color = ColorTheme,
+                        fontFamily = Font.toFontFamily()
+                    )
+                }
+            },
+            containerColor = ButtonColor1,
+            modifier = Modifier.background(
+                color = ButtonColor1,
+                shape = RoundedCornerShape(10.dp)
+            ),
+            confirmButton = {
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = { showDialog = false },
+                    contentPadding = PaddingValues(),
+                    border = BorderStroke(2.dp, ColorTheme),
+                    colors = ButtonDefaults.buttonColors(Color.Transparent),
+                    shape = RoundedCornerShape(10.dp),
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(40.dp)
+                            .background(
+                                brush = Brush.horizontalGradient(
+                                    listOf(
+                                        ButtonColor1,
+                                        ButtonColor2
+                                    )
+                                ),
+                                shape = RoundedCornerShape(10.dp)
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(stringResource(id = R.string.okay), color = ColorTheme,fontFamily = Font.toFontFamily())
+                    }
+                }
+            }
+        )
+    }
+}

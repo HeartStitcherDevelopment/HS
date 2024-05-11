@@ -25,6 +25,7 @@ import com.wtfih.heartstitcher.data.UserDataViewModel
 import com.wtfih.heartstitcher.navigation.HeartStitcherRouter
 import com.wtfih.heartstitcher.navigation.Screen
 import com.wtfih.heartstitcher.screens.AchievementsScreen
+import com.wtfih.heartstitcher.screens.AddAchievementScreen
 import com.wtfih.heartstitcher.screens.HomeScreen
 import com.wtfih.heartstitcher.screens.LoadingScreen
 import com.wtfih.heartstitcher.screens.LoginScreen
@@ -82,7 +83,7 @@ fun HeartSitcherApp(themeData: ThemeData = viewModel(), dataViewModel: UserDataV
         if(login.value) {
             dataViewModel.refresh()
             var flag = remember { mutableStateOf(true) }
-            val current = remember { dataViewModel.state.value["theme"] as Long }.toInt()
+            val current = remember { dataViewModel.state.value["theme"] as? Long ?: 0 }.toInt()
             if(flag.value){
                 flag.value = false
                 themeData.setTheme(current)
@@ -313,6 +314,10 @@ fun HeartSitcherApp(themeData: ThemeData = viewModel(), dataViewModel: UserDataV
                 }
         }
         else {
+            ColorTheme = RainTheme
+            ButtonColor1 = Rain1
+            ButtonColor2 = Rain2
+            Font = Font(R.font.rain_font)
             Image(
                 painter = painterResource(id = R.drawable.purple_background),
                 contentDescription = null,
@@ -363,6 +368,9 @@ fun HeartSitcherApp(themeData: ThemeData = viewModel(), dataViewModel: UserDataV
                 }
                 is Screen.LoadingScreen2 ->{
                     LoadingScreen(loadingTimeMillis = 1000, onLoadingComplete = {HeartStitcherRouter.navigateTo(Screen.WheelScreen)})
+                }
+                is Screen.AddAchievementScreen ->{
+                    AddAchievementScreen()
                 }
             }
         }

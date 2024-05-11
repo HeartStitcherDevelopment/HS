@@ -19,6 +19,7 @@ sealed class Screen {
     object TaskScreen : Screen()
     object LoadingScreen : Screen()
     object LoadingScreen2 : Screen()
+    object AddAchievementScreen : Screen()
 }
 
 object HeartStitcherRouter {
