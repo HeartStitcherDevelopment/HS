@@ -84,8 +84,11 @@ fun HeartSitcherApp(themeData: ThemeData = viewModel(), dataViewModel: UserDataV
             dataViewModel.refresh()
             var flag = remember { mutableStateOf(true) }
             val current = remember { dataViewModel.state.value["theme"] as? Long ?: 0 }.toInt()
+            val c_music = remember  { dataViewModel.state.value["music"] as? Boolean ?: true}
+            val c_sounds = remember  { dataViewModel.state.value["sounds"] as? Boolean ?: true}
             if(flag.value){
                 flag.value = false
+                if(themeData.music.value != c_music) themeData.setMusic()
                 themeData.setTheme(current)
                 when (current){
                     0 -> {themeData.setColor(RainTheme)
@@ -142,13 +145,15 @@ fun HeartSitcherApp(themeData: ThemeData = viewModel(), dataViewModel: UserDataV
                 }
             }
                 val th = remember { derivedStateOf { themeData.theme.value } }
+                val music = remember {  derivedStateOf{ themeData.music.value } }
+                val sounds = remember { derivedStateOf { themeData.sounds.value }}
                 when (th.value) {
                     0 -> {
                         ColorTheme = RainTheme
                         ButtonColor1 = Rain1
                         ButtonColor2 = Rain2
                         Font = Font(R.font.rain_font)
-                        MusicPlayer(loop = true, audioResourceId = R.raw.lights)
+                        MusicPlayer(loop = true, audioResourceId = R.raw.lights, isPlaying = music.value)
                         Image(
                             painter = painterResource(id = R.drawable.rainy_background),
                             contentDescription = null,
@@ -161,7 +166,7 @@ fun HeartSitcherApp(themeData: ThemeData = viewModel(), dataViewModel: UserDataV
                         ButtonColor1 = Japan1
                         ButtonColor2 = Japan2
                         Font = Font(R.font.japan_font)
-                        MusicPlayer(loop = true, audioResourceId = R.raw.hanamura)
+                        MusicPlayer(loop = true, audioResourceId = R.raw.hanamura, isPlaying = music.value)
                         Image(
                             painter = painterResource(id = R.drawable.japanese_background),
                             contentDescription = null,
@@ -174,7 +179,7 @@ fun HeartSitcherApp(themeData: ThemeData = viewModel(), dataViewModel: UserDataV
                         ButtonColor1 = Futuristic1
                         ButtonColor2 = Futuristic2
                         Font = Font(R.font.futuristic_font)
-                        MusicPlayer(loop = true, audioResourceId = R.raw.make_this_right)
+                        MusicPlayer(loop = true, audioResourceId = R.raw.make_this_right, isPlaying = music.value)
                         Image(
                             painter = painterResource(id = R.drawable.futuristic_background),
                             contentDescription = null,
@@ -187,7 +192,7 @@ fun HeartSitcherApp(themeData: ThemeData = viewModel(), dataViewModel: UserDataV
                         ButtonColor1 = Chill1
                         ButtonColor2 = Chill2
                         Font = Font(R.font.chill_font)
-                        MusicPlayer(loop = true, audioResourceId = R.raw.slow_boat)
+                        MusicPlayer(loop = true, audioResourceId = R.raw.slow_boat, isPlaying = music.value)
                         Image(
                             painter = painterResource(id = R.drawable.chill_background),
                             contentDescription = null,
@@ -200,7 +205,7 @@ fun HeartSitcherApp(themeData: ThemeData = viewModel(), dataViewModel: UserDataV
                         ButtonColor1 = Anime1
                         ButtonColor2 = Anime2
                         Font = Font(R.font.anime_font)
-                        MusicPlayer(loop = true, audioResourceId = R.raw.mikichan)
+                        MusicPlayer(loop = true, audioResourceId = R.raw.mikichan, isPlaying = music.value)
                         Image(
                             painter = painterResource(id = R.drawable.anime_girl_background),
                             contentDescription = null,
@@ -213,7 +218,7 @@ fun HeartSitcherApp(themeData: ThemeData = viewModel(), dataViewModel: UserDataV
                         ButtonColor1 = Retro1
                         ButtonColor2 = Retro2
                         Font = Font(R.font.retro_font)
-                        MusicPlayer(loop = true, audioResourceId = R.raw.howling_grotto)
+                        MusicPlayer(loop = true, audioResourceId = R.raw.howling_grotto, isPlaying = music.value)
                         Image(
                             painter = painterResource(id = R.drawable.retro_background),
                             contentDescription = null,
@@ -226,7 +231,7 @@ fun HeartSitcherApp(themeData: ThemeData = viewModel(), dataViewModel: UserDataV
                         ButtonColor1 = Solitude1
                         ButtonColor2 = Solitude2
                         Font = Font(R.font.solitude_font)
-                        MusicPlayer(loop = true, audioResourceId = R.raw.solo_made)
+                        MusicPlayer(loop = true, audioResourceId = R.raw.solo_made, isPlaying = music.value)
                         Image(
                             painter = painterResource(id = R.drawable.solitude_background),
                             contentDescription = null,
@@ -239,7 +244,7 @@ fun HeartSitcherApp(themeData: ThemeData = viewModel(), dataViewModel: UserDataV
                         ButtonColor1 = Space1
                         ButtonColor2 = Space2
                         Font = Font(R.font.space_font)
-                        MusicPlayer(loop = true, audioResourceId = R.raw.purple_eyes)
+                        MusicPlayer(loop = true, audioResourceId = R.raw.purple_eyes, isPlaying = music.value)
                         Image(
                             painter = painterResource(id = R.drawable.space_background),
                             contentDescription = null,
@@ -252,7 +257,7 @@ fun HeartSitcherApp(themeData: ThemeData = viewModel(), dataViewModel: UserDataV
                         ButtonColor1 = Love1
                         ButtonColor2 = Love2
                         Font = Font(R.font.love_font)
-                        MusicPlayer(loop = true, audioResourceId = R.raw.love)
+                        MusicPlayer(loop = true, audioResourceId = R.raw.love, isPlaying = music.value)
                         Image(
                             painter = painterResource(id = R.drawable.love_background),
                             contentDescription = null,
@@ -265,7 +270,7 @@ fun HeartSitcherApp(themeData: ThemeData = viewModel(), dataViewModel: UserDataV
                         ButtonColor1 = Forest1
                         ButtonColor2 = Forest2
                         Font = Font(R.font.forest_font)
-                        MusicPlayer(loop = true, audioResourceId = R.raw.flower_maiden)
+                        MusicPlayer(loop = true, audioResourceId = R.raw.flower_maiden, isPlaying = music.value)
                         Image(
                             painter = painterResource(id = R.drawable.forest_background),
                             contentDescription = null,
@@ -278,7 +283,7 @@ fun HeartSitcherApp(themeData: ThemeData = viewModel(), dataViewModel: UserDataV
                         ButtonColor1 = Psycho1
                         ButtonColor2 = Psycho2
                         Font = Font(R.font.psycho_font)
-                        MusicPlayer(loop = true, audioResourceId = R.raw.psycho_theme)
+                        MusicPlayer(loop = true, audioResourceId = R.raw.psycho_theme, isPlaying = music.value)
                         Image(
                             painter = painterResource(id = R.drawable.psycho_background),
                             contentDescription = null,
@@ -290,7 +295,7 @@ fun HeartSitcherApp(themeData: ThemeData = viewModel(), dataViewModel: UserDataV
                         ColorTheme = RobloxTheme
                         ButtonColor1 = Roblox1
                         ButtonColor2 = Roblox2
-                        MusicPlayer(loop = true, audioResourceId = R.raw.roblox)
+                        MusicPlayer(loop = true, audioResourceId = R.raw.roblox, isPlaying = music.value)
                         Image(
                             painter = painterResource(id = R.drawable.roblox_background),
                             contentDescription = null,
@@ -303,7 +308,7 @@ fun HeartSitcherApp(themeData: ThemeData = viewModel(), dataViewModel: UserDataV
                         ButtonColor1 = Rain1
                         ButtonColor2 = Rain2
                         Font = Font(R.font.rain_font)
-                        MusicPlayer(loop = true, audioResourceId = R.raw.lights)
+                        MusicPlayer(loop = true, audioResourceId = R.raw.lights, isPlaying = music.value)
                         Image(
                             painter = painterResource(id = R.drawable.rainy_background),
                             contentDescription = null,

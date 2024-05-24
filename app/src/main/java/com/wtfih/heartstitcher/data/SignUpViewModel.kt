@@ -146,7 +146,9 @@ class SignUpViewModel : ViewModel() {
                         "mail" to email,
                         "tasks" to mutableListOf<String>(),
                         "theme" to 0,
-                        "achievements" to mutableListOf<Pair<String, String>>()
+                        "achievements" to mutableListOf<Pair<String, String>>(),
+                        "music" to true,
+                        "sounds" to true
                     )
                     database.collection("users")
                         .document(uid).set(user)

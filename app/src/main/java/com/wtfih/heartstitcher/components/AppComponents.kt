@@ -32,7 +32,6 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.AlertDialog
@@ -49,6 +48,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -79,7 +79,6 @@ import androidx.compose.ui.text.font.toFontFamily
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
@@ -180,67 +179,6 @@ fun TextFieldComponent(labelValue: String, painterResource: Painter,
         },
         isError = !errorStatus
     )
-}
-
-//@OptIn(ExperimentalMaterial3Api::class)
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun LargeTextField(onStringListChange: (List<String>) -> Unit,labelValue: String) {
-    val stringList = remember { mutableStateListOf<String>() }
-    val textFieldValue = remember { mutableStateOf(TextFieldValue()) }
-    Column {
-        OutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(componentShapes.small),
-            label = { Text(text = labelValue) },
-            value = textFieldValue.value, // Access the value property of MutableState
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = Primary,
-                unfocusedBorderColor = Secondary,
-                focusedLabelColor = Primary,
-                cursorColor = Primary,
-                containerColor = BGColor
-            ),/*onImeActionPerformed = { action, _ ->
-                if (action == ImeAction.Done && textFieldValue.value.text.isNotBlank()) {
-                    stringList.add(textFieldValue.value.text)
-                    onStringListChange(stringList)
-                    textFieldValue.value = TextFieldValue()
-                }
-            },*/
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-            singleLine = false,
-            maxLines = 10,
-            onValueChange = {
-                textFieldValue.value = it
-            },
-            isError = false,
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        LazyColumn {
-            items(stringList) { string ->
-                Text(text = string)
-            }
-        }
-    }
-}
-
-@Composable
-fun StringItem(text: String, onRemove: (String) -> Unit) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(vertical = 4.dp)
-    ) {
-        Text(text = text, modifier = Modifier.weight(1f))
-        IconButton(onClick = { onRemove(text) }) {
-            Icon(
-                imageVector = Icons.Default.Close,
-                contentDescription = "Remove string"
-            )
-        }
-    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -909,46 +847,33 @@ fun LazyColumnItems(items: List<String>, onDeleteClicked: (String) -> Unit) {
 }
 
 @Composable
-fun MusicPlayer(loop: Boolean = false,audioResourceId: Int) {
+fun MusicPlayer(loop: Boolean = false, audioResourceId: Int, isPlaying: Boolean = true) {
     val context = LocalContext.current
     val mediaPlayer = remember {
         MediaPlayer.create(context, audioResourceId).apply {
             isLooping = loop // Loop the audio track
-            start() // Start playback
         }
     }
 
-
-    DisposableEffect(Unit) {
+    DisposableEffect(mediaPlayer) {
         onDispose {
             mediaPlayer.release()
         }
     }
-    /*
-    Box(modifier = Modifier.size(48.dp)) {
 
-        IconButton(
-            onClick = {
-                if (mediaPlayer.isPlaying) {
-                    mediaPlayer.pause()
-                } else {
-                    mediaPlayer.start()
-                }
-            },
-            modifier = Modifier.size(48.dp)
-        ) {
-            val iconRes = if (mediaPlayer.isPlaying) {
-                R.drawable.ic_pause
-            } else {
-                R.drawable.ic_play
+    LaunchedEffect(isPlaying) {
+        if (isPlaying) {
+            if (!mediaPlayer.isPlaying) {
+                mediaPlayer.start() // Start playback if isPlaying is true
             }
-            Icon(
-                painter = painterResource(id = iconRes),
-                contentDescription = stringResource(id = R.string.play_pause)
-            )
+        } else {
+            if (mediaPlayer.isPlaying) {
+                mediaPlayer.pause() // Pause playback if isPlaying is false
+            }
         }
-    }*/
+    }
 }
+
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
@@ -1165,7 +1090,7 @@ fun AchievementComponent(
                     } else {
                         value
                     },
-                    fontSize = 18.sp,
+                    fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center,
                     color = ColorTheme,
@@ -1175,12 +1100,12 @@ fun AchievementComponent(
             }
             else{
                 Text(
-                    text = if (value.length > 90) {
-                        "${value.take(90)}..."
+                    text = if (value.length > 80) {
+                        "${value.take(80)}..."
                     } else {
                         value
                     },
-                    fontSize = 20.sp,
+                    fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center,
                     color = ColorTheme,
@@ -1270,7 +1195,7 @@ fun AchievementComponent(
                     Spacer(modifier = Modifier.height(25.dp))
                     Text(
                         text = value,
-                        fontSize = 20.sp,
+                        fontSize = 18.sp,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(horizontal = 16.dp)
                             .fillMaxWidth(),
@@ -1316,5 +1241,66 @@ fun AchievementComponent(
                 }
             }
         )
+    }
+}
+
+@SuppressLint("CoroutineCreationDuringComposition")
+@Composable
+fun SettingsIconComponent(
+    value: String,
+    onIconClicked: () -> Unit,
+    isEnabled: Boolean = true,
+    painterResource: Painter,
+    alternatePainterResource: Painter,
+    useAlternate: Boolean = true,
+    color: Color = ColorTheme,
+    color1: Color = ButtonColor1,
+    color2: Color = ButtonColor2,
+    fontResource: Font = Font
+) {
+    val currentPainter = if (!useAlternate) alternatePainterResource else painterResource
+
+    androidx.compose.material3.Button(
+        modifier = Modifier
+            .heightIn(125.dp)
+            .widthIn(125.dp),
+        onClick = {
+            onIconClicked.invoke()
+        },
+        contentPadding = PaddingValues(),
+        colors = ButtonDefaults.buttonColors(Color.Transparent),
+        shape = RoundedCornerShape(10.dp),
+        enabled = isEnabled,
+        border = BorderStroke(2.dp, color)
+    ) {
+        Box(
+            modifier = Modifier
+                .heightIn(125.dp)
+                .widthIn(125.dp)
+                .background(
+                    brush = Brush.horizontalGradient(listOf(color1, color2)),
+                    shape = RoundedCornerShape(10.dp)
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Icon(
+                    painter = currentPainter,
+                    contentDescription = "",
+                    modifier = Modifier.size(75.dp),
+                    tint = color
+                )
+                Spacer(modifier = Modifier.height(5.dp))
+                Text(
+                    text = value,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = color,
+                    fontFamily = fontResource.toFontFamily()
+                )
+            }
+        }
     }
 }

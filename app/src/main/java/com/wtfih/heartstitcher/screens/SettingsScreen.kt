@@ -31,7 +31,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.wtfih.heartstitcher.R
 import com.wtfih.heartstitcher.components.HeadingTextComponent
-import com.wtfih.heartstitcher.components.IconComponent
+import com.wtfih.heartstitcher.components.SettingsIconComponent
 import com.wtfih.heartstitcher.components.ThemeIcon
 import com.wtfih.heartstitcher.data.ThemeData
 import com.wtfih.heartstitcher.navigation.HeartStitcherRouter
@@ -80,6 +80,8 @@ fun SettingsScreen(themeData: ThemeData = viewModel()) {
     val color1 by remember {  derivedStateOf { themeData.color1} }
     val color2 by remember {  derivedStateOf { themeData.color2} }
     val font by remember { derivedStateOf { themeData.font} }
+    val music = remember {  derivedStateOf{ themeData.music.value } }
+    val sounds = remember {  derivedStateOf{ themeData.sounds.value } }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -287,23 +289,27 @@ fun SettingsScreen(themeData: ThemeData = viewModel()) {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ){
-                IconComponent(
+                SettingsIconComponent(
                     value = stringResource(id = R.string.music),
-                    onIconClicked = {
-                         },
+                    onIconClicked = { themeData.setMusic()
+                        db.collection("users").document(id).update("music", themeData.music.value) },
                     isEnabled = true,
                     painterResource(id = R.drawable.music_on),
+                    alternatePainterResource = painterResource(id = R.drawable.music_off),
+                    useAlternate = music.value,
                     color = color.value,
                     color1 = color1.value,
                     color2 = color2.value
                 )
                 Spacer(modifier = Modifier.width(50.dp))
-                IconComponent(
+                SettingsIconComponent(
                     value = stringResource(id = R.string.sounds),
-                    onIconClicked = {
-                         },
+                    onIconClicked = { themeData.setSounds()
+                        db.collection("users").document(id).update("sounds", themeData.sounds.value) },
                     isEnabled = true,
                     painterResource(id = R.drawable.sounds_on),
+                    alternatePainterResource = painterResource(id = R.drawable.sounds_off),
+                    useAlternate = sounds.value,
                     color = color.value,
                     color1 = color1.value,
                     color2 = color2.value
