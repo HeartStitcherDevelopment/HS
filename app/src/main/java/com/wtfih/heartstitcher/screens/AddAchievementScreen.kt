@@ -4,6 +4,7 @@ import android.content.ContentResolver
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
@@ -23,33 +24,31 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
 import com.wtfih.heartstitcher.R
 import com.wtfih.heartstitcher.components.AchievementPreview
 import com.wtfih.heartstitcher.components.ButtonComponent
 import com.wtfih.heartstitcher.components.HeadingTextComponent
+import com.wtfih.heartstitcher.data.StorageUtil
 import com.wtfih.heartstitcher.data.UserDataViewModel
 import com.wtfih.heartstitcher.navigation.HeartStitcherRouter
 import com.wtfih.heartstitcher.navigation.Screen
 import com.wtfih.heartstitcher.navigation.SystemBackButtonHandler
-import java.io.File
 import java.io.IOException
 
 @Composable
 fun AddAchievementScreen(dataViewModel: UserDataViewModel = viewModel()) {
-    val context = LocalContext.current
     val achievements = remember { dataViewModel.state.value["achievements"] as? MutableList<Pair<String,String>> ?: mutableListOf() }
+    val db = Firebase.firestore
     val id = Firebase.auth.currentUser!!.uid
-    val storageReference = Firebase.storage.reference
-    val imageRef = storageReference.child("users/$id")
+    val context = LocalContext.current
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
     var bitmap : Bitmap? = null
     var textValue by remember { mutableStateOf("") }
-    val launcher =
-        rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-            selectedImageUri = uri
-        }
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        selectedImageUri = uri
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -69,20 +68,23 @@ fun AddAchievementScreen(dataViewModel: UserDataViewModel = viewModel()) {
                 onValueChange =  { textValue = it }, labelValue = stringResource(id = R.string.type_here))
             Spacer(modifier = Modifier.height(60.dp))
             ButtonComponent(value = stringResource(id = R.string.finish), onButtonClicked = {
-                if (bitmap != null && selectedImageUri != null) {
-                    val file = File(selectedImageUri!!.path!!)
-                    val fileUri = Uri.fromFile(file)
-                    imageRef.putFile(fileUri).addOnSuccessListener {
-                        imageRef.downloadUrl.addOnSuccessListener { uri ->
-                            achievements.add(Pair(textValue, uri.toString()))
-                            dataViewModel.refresh()
-                        }
+                if (bitmap != null && textValue.isNotEmpty()) {
+                    selectedImageUri?.let {
+                        StorageUtil.uploadToStorage(uri = it, context = context, type = "image", text = textValue, achievements = achievements)
+                    }
+                } else if (bitmap == null && textValue.isNotEmpty()) {
+                    achievements.add(Pair(textValue, ""))
+                    db.collection("users").document(id).update("achievements", achievements).addOnSuccessListener {
+                        Toast.makeText(
+                            context,
+                            "Success!",
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
                 }
-                else if (bitmap == null && textValue.isNotEmpty()){
-                    achievements.add(Pair(textValue, ""))
-                    dataViewModel.refresh()
-                }
+                dataViewModel.refresh()
+                textValue = ""
+                selectedImageUri = null
             })
         }
         SystemBackButtonHandler {

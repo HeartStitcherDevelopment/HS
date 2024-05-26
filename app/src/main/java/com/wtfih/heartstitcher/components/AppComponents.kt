@@ -1189,7 +1189,9 @@ fun AchievementComponent(
                     Image(
                         bitmap = bitmap.asImageBitmap(),
                         contentDescription = null,
-                        modifier = Modifier.size(220.dp).clip(RoundedCornerShape(10.dp)),
+                        modifier = Modifier
+                            .size(220.dp)
+                            .clip(RoundedCornerShape(10.dp)),
                         contentScale = ContentScale.Crop
                     )}
                     Spacer(modifier = Modifier.height(25.dp))
@@ -1197,7 +1199,8 @@ fun AchievementComponent(
                         text = value,
                         fontSize = 18.sp,
                         textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(horizontal = 16.dp)
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
                             .fillMaxWidth(),
                         overflow = TextOverflow.Visible,
                         softWrap = true,
@@ -1304,3 +1307,4 @@ fun SettingsIconComponent(
         }
     }
 }
+
