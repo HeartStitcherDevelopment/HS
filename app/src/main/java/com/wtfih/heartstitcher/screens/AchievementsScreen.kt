@@ -41,7 +41,7 @@ fun AchievementsScreen() {
             Spacer(modifier = Modifier.height(20.dp))
             DividerTextComponent()
             Spacer(modifier = Modifier.height(20.dp))
-            ButtonComponent(value = stringResource(id = R.string.browse), onButtonClicked = { /*TODO*/ })
+            ButtonComponent(value = stringResource(id = R.string.browse), onButtonClicked = { HeartStitcherRouter.navigateTo(Screen.BrowseAchievementScreen)})
             Spacer(modifier = Modifier.height(20.dp))
         }
         SystemBackButtonHandler {

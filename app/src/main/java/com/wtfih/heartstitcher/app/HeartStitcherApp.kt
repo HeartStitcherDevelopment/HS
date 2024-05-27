@@ -26,6 +26,7 @@ import com.wtfih.heartstitcher.navigation.HeartStitcherRouter
 import com.wtfih.heartstitcher.navigation.Screen
 import com.wtfih.heartstitcher.screens.AchievementsScreen
 import com.wtfih.heartstitcher.screens.AddAchievementScreen
+import com.wtfih.heartstitcher.screens.BrowseAchievementScreen
 import com.wtfih.heartstitcher.screens.HomeScreen
 import com.wtfih.heartstitcher.screens.LoadingScreen
 import com.wtfih.heartstitcher.screens.LoginScreen
@@ -376,6 +377,9 @@ fun HeartSitcherApp(themeData: ThemeData = viewModel(), dataViewModel: UserDataV
                 }
                 is Screen.AddAchievementScreen ->{
                     AddAchievementScreen()
+                }
+                is Screen.BrowseAchievementScreen ->{
+                    BrowseAchievementScreen()
                 }
             }
         }

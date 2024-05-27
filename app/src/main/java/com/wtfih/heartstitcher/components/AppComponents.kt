@@ -4,6 +4,7 @@ package com.wtfih.heartstitcher.components
 
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.media.MediaPlayer
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
@@ -87,6 +88,9 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.ImageLoader
+import coil.request.ImageRequest
+import coil.request.SuccessResult
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -1307,4 +1311,51 @@ fun SettingsIconComponent(
         }
     }
 }
+
+@SuppressLint("SuspiciousIndentation")
+@Composable
+fun AchievementsList(achievements: List<Pair<String, String>>) {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(30.dp)
+    ) {
+        items(achievements.chunked(2)) { chunk ->
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(30.dp)
+            ) {
+                chunk.forEach { item ->
+                    val bitmap: Bitmap? = if (item.second.isNotEmpty()) loadImageBitmap(item.second) else null
+                    AchievementComponent(
+                        value = item.first,
+                        isEnabled = true,
+                        bitmap = bitmap
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+        }
+    }
+}
+
+
+@Composable
+fun loadImageBitmap(url: String): Bitmap {
+    val context = LocalContext.current
+    var bitmap by remember { mutableStateOf<Bitmap>(value = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)) }
+
+    LaunchedEffect(url) {
+        val imageLoader = ImageLoader(context)
+        val request = ImageRequest.Builder(context)
+            .data(url)
+            .build()
+
+        val result = imageLoader.execute(request)
+        if (result is SuccessResult) {
+            bitmap = (result.drawable as BitmapDrawable).bitmap
+        }
+    }
+    return bitmap
+}
+
 
