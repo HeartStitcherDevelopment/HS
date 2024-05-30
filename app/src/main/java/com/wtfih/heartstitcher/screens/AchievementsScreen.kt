@@ -36,7 +36,7 @@ fun AchievementsScreen() {
             HeadingTextComponent(value = stringResource(id = R.string.achievements))
             Spacer(modifier = Modifier.height(40.dp))
             NormalTextComponent(value = stringResource(id = R.string.achievements_into))
-            Spacer(modifier = Modifier.height(100.dp))
+            Spacer(modifier = Modifier.weight(1f))
             ButtonComponent(value = stringResource(id = R.string.add), onButtonClicked = { HeartStitcherRouter.navigateTo(Screen.AddAchievementScreen)})
             Spacer(modifier = Modifier.height(20.dp))
             DividerTextComponent()

@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -36,7 +37,7 @@ import com.wtfih.heartstitcher.navigation.SystemBackButtonHandler
 
 @Composable
 fun LoginScreen(logInViewModel: LogInViewModel = viewModel()){
-
+    val context = LocalContext.current
     Box(modifier = Modifier.fillMaxSize()
         //.background(brush = Brush.horizontalGradient(listOf(Purple, Blue)))
         .padding(28.dp),
@@ -81,7 +82,7 @@ fun LoginScreen(logInViewModel: LogInViewModel = viewModel()){
                 ButtonComponent(
                     value = stringResource(id = R.string.login),
                     onButtonClicked = {
-                        logInViewModel.onEvent(LogInUIEvent.LoginButtonClicked)
+                        logInViewModel.onEvent(LogInUIEvent.LoginButtonClicked, context = context)
                     },
                     isEnabled = logInViewModel.allValidationsPassed.value
                 )

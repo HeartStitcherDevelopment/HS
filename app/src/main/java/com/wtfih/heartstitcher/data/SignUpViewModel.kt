@@ -22,7 +22,7 @@ class SignUpViewModel : ViewModel() {
 
     var signUpInProgress = mutableStateOf(false)
 
-    fun onEvent(event: SignUpUIEvent) {
+    fun onEvent(event: SignUpUIEvent, context: android.content.Context? = null) {
         validateDataWithRules()
         when(event){
             is SignUpUIEvent.FirstNameChanged -> {
@@ -58,7 +58,7 @@ class SignUpViewModel : ViewModel() {
             }
 
             is SignUpUIEvent.RegisterButtonClicked -> {
-                signUp()
+                signUp(context = context)
             }
 
             is SignUpUIEvent.PrivacyPolicyCheckBoxClicked -> {
@@ -69,14 +69,15 @@ class SignUpViewModel : ViewModel() {
         }
     }
 
-    private fun signUp() {
+    private fun signUp(context: android.content.Context? = null) {
         Log.d(TAG,"Inside_signUp")
         printState()
         createUserInFirebase(
             email = registrationUIState.value.email,
             password = registrationUIState.value.password,
             name = registrationUIState.value.firstName,
-            surname = registrationUIState.value.lastName
+            surname = registrationUIState.value.lastName,
+            context = context
         )
     }
 
@@ -125,7 +126,7 @@ class SignUpViewModel : ViewModel() {
         Log.d(TAG,registrationUIState.value.toString())
     }
 
-    private fun createUserInFirebase(email:String,password:String,name:String,surname:String){
+    private fun createUserInFirebase(email:String,password:String,name:String,surname:String, context: android.content.Context? = null){
 
         signUpInProgress.value = true
 
@@ -148,17 +149,17 @@ class SignUpViewModel : ViewModel() {
                         "theme" to 0,
                         "achievements" to mutableListOf<Pair<String, String>>(),
                         "music" to true,
-                        "sounds" to true
+                        "sounds" to true,
+                        "sleep" to false,
+                        "sleep1" to 0,
+                        "sleep2" to 0,
+                        "sleep3" to true,
+                        "water" to false,
+                        "food" to false,
                     )
+                    saveCredentials(context = context!!, email = email, password = password)
                     database.collection("users")
                         .document(uid).set(user)
-                        /*.addOnSuccessListener { documentReference ->
-                            Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
-                            }
-                            .addOnFailureListener { e ->
-                                Log.w(TAG, "Error adding document", e)
-                            }*/
-
                     HeartStitcherRouter.navigateTo(Screen.HomeScreen)
                 }
             }

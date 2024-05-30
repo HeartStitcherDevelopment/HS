@@ -18,7 +18,7 @@ class LogInViewModel : ViewModel() {
 
     var loginInProgress = mutableStateOf(false)
 
-    fun onEvent(event:LogInUIEvent){
+    fun onEvent(event:LogInUIEvent,context: android.content.Context? = null){
         when(event){
             is LogInUIEvent.EmailChanged ->{
                 logInUIState.value = logInUIState.value.copy(
@@ -33,7 +33,7 @@ class LogInViewModel : ViewModel() {
             }
 
             is LogInUIEvent.LoginButtonClicked ->{
-                login()
+                login(context = context)
             }
         }
         validateLogInDataWithRules()
@@ -60,12 +60,13 @@ class LogInViewModel : ViewModel() {
 
     }
 
-    private fun login() {
+    private fun login(context: android.content.Context? = null) {
 
         loginInProgress.value = true
 
         val email = logInUIState.value.email
         val password = logInUIState.value.password
+        saveCredentials(context = context!!, email = email, password = password)
 
         FirebaseAuth
             .getInstance()

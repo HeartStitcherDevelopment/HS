@@ -130,19 +130,6 @@ fun SettingsScreen(themeData: ThemeData = viewModel()) {
                     fontResource = Font(R.font.rain_font))
                     Spacer(modifier = Modifier.width(5.dp))}
                 item{ ThemeIcon(
-                    value = stringResource(id = R.string.japan),
-                    onIconClicked = { themeData.setTheme(1);
-                        db.collection("users").document(id).update("theme", 1);
-                        themeData.setColor(JapanTheme)
-                        themeData.setColor1(Japan1)
-                        themeData.setColor2(Japan2)
-                        themeData.setFont(Font(R.font.japan_font))},
-                    painterResource = R.drawable.japanese_background,
-                    textColor = JapanTheme,
-                    fontResource = Font(R.font.japan_font)
-                )
-                    Spacer(modifier = Modifier.width(5.dp))}
-                item{ ThemeIcon(
                     value = stringResource(id = R.string.future),
                     onIconClicked = { themeData.setTheme(2);
                         db.collection("users").document(id).update("theme", 2);
@@ -165,6 +152,19 @@ fun SettingsScreen(themeData: ThemeData = viewModel()) {
                     painterResource = R.drawable.chill_background,
                     textColor = ChillTheme,
                     fontResource = Font(R.font.chill_font))
+                    Spacer(modifier = Modifier.width(5.dp))}
+                item{ ThemeIcon(
+                    value = stringResource(id = R.string.japan),
+                    onIconClicked = { themeData.setTheme(1);
+                        db.collection("users").document(id).update("theme", 1);
+                        themeData.setColor(JapanTheme)
+                        themeData.setColor1(Japan1)
+                        themeData.setColor2(Japan2)
+                        themeData.setFont(Font(R.font.japan_font))},
+                    painterResource = R.drawable.japanese_background,
+                    textColor = JapanTheme,
+                    fontResource = Font(R.font.japan_font)
+                )
                     Spacer(modifier = Modifier.width(5.dp))}
                 item{ ThemeIcon(
                     value = stringResource(id = R.string.anime),

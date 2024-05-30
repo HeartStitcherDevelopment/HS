@@ -21,11 +21,13 @@ sealed class Screen {
     object LoadingScreen2 : Screen()
     object AddAchievementScreen : Screen()
     object BrowseAchievementScreen : Screen()
+    object PlaceHolderScreen : Screen()
+    object DreamsScreen : Screen()
 }
 
 object HeartStitcherRouter {
 
-    var currentScreen: MutableState<Screen> = mutableStateOf(Screen.SignUpScreen)
+    var currentScreen: MutableState<Screen> = mutableStateOf(Screen.PlaceHolderScreen)
 
     fun navigateTo(destination : Screen){
         currentScreen.value = destination

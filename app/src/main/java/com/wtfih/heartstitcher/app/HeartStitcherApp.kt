@@ -27,12 +27,14 @@ import com.wtfih.heartstitcher.navigation.Screen
 import com.wtfih.heartstitcher.screens.AchievementsScreen
 import com.wtfih.heartstitcher.screens.AddAchievementScreen
 import com.wtfih.heartstitcher.screens.BrowseAchievementScreen
+import com.wtfih.heartstitcher.screens.DreamsScreen
 import com.wtfih.heartstitcher.screens.HomeScreen
 import com.wtfih.heartstitcher.screens.LoadingScreen
 import com.wtfih.heartstitcher.screens.LoginScreen
 import com.wtfih.heartstitcher.screens.NotepadScreen
 import com.wtfih.heartstitcher.screens.NutritionScreen
 import com.wtfih.heartstitcher.screens.PanicScreen
+import com.wtfih.heartstitcher.screens.PlaceHolderScreen
 import com.wtfih.heartstitcher.screens.SettingsScreen
 import com.wtfih.heartstitcher.screens.SignUpScreen
 import com.wtfih.heartstitcher.screens.SleepScreen
@@ -380,6 +382,12 @@ fun HeartSitcherApp(themeData: ThemeData = viewModel(), dataViewModel: UserDataV
                 }
                 is Screen.BrowseAchievementScreen ->{
                     BrowseAchievementScreen()
+                }
+                is Screen.PlaceHolderScreen ->{
+                    PlaceHolderScreen()
+                }
+                is Screen.DreamsScreen ->{
+                    DreamsScreen()
                 }
             }
         }

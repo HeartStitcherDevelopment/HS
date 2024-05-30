@@ -152,7 +152,7 @@
     <string name="love">Love</string>
     <string name="forest">Forest</string>
     <string name="psycho">Psycho</string>
-    <string name="achievements_into">Here you can add things you are truly proud of. Do not fret, even the slightest success matters.</string>
+    <string name="achievements_into">Here you can add things you are truly proud of. Do not fret, even the slightest success matters. Even the smallest little thing makes you out of you. Don\'t be shy of sharing those joyful moments and embrace, as they form your soul and sole purpose in life. Always grasp onto them.</string>
     <string name="add">Add</string>
     <string name="browse">Browse</string>
     <string name="add_photo">Add Photo</string>
@@ -163,4 +163,13 @@
     <string name="memento">Memorial of Your Achievement!</string>
     <string name="okay">Okay!</string>
     <string name="wall">Wall of Fame</string>
+    <string name="dreams">Dreams</string>
+    <string name="sleep_rules">Select the time you normally wake up at and we will make sure that your dreams are remembered, so you can analyze them later. Please note that you should sleep at least 7 hours a day.</string>
+    <string name="sleep_exp">Here you can take care of your sleep.</string>
+    <string name="set">Set notification</string>
+    <string name="nutrition_info">Here we can work on your proper nutrition.</string>
+    <string name="nutrition_rules">Select what you need help with and the time when you\'re active, and we\'ll make sure that you are healthy.</string>
+    <string name="food_reminder">Food reminder</string>
+    <string name="water_reminder">Water reminder</string>
+    <string name="unset">Unset notification</string>
 </resources>

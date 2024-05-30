@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -32,8 +33,8 @@ import com.wtfih.heartstitcher.navigation.Screen
 
 @Composable
 fun SignUpScreen (signUpViewModel: SignUpViewModel = viewModel()){
+    val context = LocalContext.current
     Box(modifier = Modifier.fillMaxSize()
-        //.background(brush = Brush.horizontalGradient(listOf(Purple, Blue)))
         .padding(28.dp),
         contentAlignment = Alignment.Center,
     ){
@@ -92,7 +93,7 @@ fun SignUpScreen (signUpViewModel: SignUpViewModel = viewModel()){
 
                 ButtonComponent(value = stringResource(id = R.string.register),
                     onButtonClicked = {
-                        signUpViewModel.onEvent(SignUpUIEvent.RegisterButtonClicked)
+                        signUpViewModel.onEvent(SignUpUIEvent.RegisterButtonClicked, context = context)
                     },
                     isEnabled = signUpViewModel.allValidationsPassed.value
                 )

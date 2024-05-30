@@ -332,7 +332,7 @@ fun ButtonComponent(value: String, onButtonClicked : () -> Unit, isEnabled: Bool
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
-fun SmallButtonComponent(width: Int = 64,value: String, onButtonClicked : () -> Unit, isEnabled: Boolean = true){
+fun SmallButtonComponent(width: Int = 64,value: String, onButtonClicked : () -> Unit, isEnabled: Boolean = true, board: Int = 2){
     androidx.compose.material3.
     Button(
         modifier = Modifier
@@ -345,7 +345,7 @@ fun SmallButtonComponent(width: Int = 64,value: String, onButtonClicked : () -> 
         colors = ButtonDefaults.buttonColors(Color.Transparent),
         shape = RoundedCornerShape(50.dp),
         enabled = isEnabled,
-        border = BorderStroke(2.dp, ColorTheme)
+        border = BorderStroke(board.dp, ColorTheme)
     ) {
         Box(modifier = Modifier
             .widthIn(width.dp)
@@ -1358,4 +1358,104 @@ fun loadImageBitmap(url: String): Bitmap {
     return bitmap
 }
 
+@Composable
+fun AchievementComponent(
+    value: String,
+    isEnabled: Boolean = true
+) {
+    var showDialog by remember { mutableStateOf(false) }
+
+    Box(
+        modifier = Modifier
+            .width(150.dp)
+            .height(150.dp)
+            .padding(0.dp)
+            .border(
+                width = 3.dp,
+                color = ColorTheme,
+                shape = RoundedCornerShape(10.dp)
+            )
+            .background(
+                brush = Brush.horizontalGradient(listOf(ButtonColor1, ButtonColor2)),
+                shape = RoundedCornerShape(10.dp)
+            )
+            .clickable(enabled = isEnabled) { showDialog = true },
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = if (value.length > 80) {
+                    "${value.take(80)}..."
+                } else {
+                    value
+                },
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+                color = ColorTheme,
+                fontFamily = Font.toFontFamily(),
+                modifier = Modifier.width(130.dp)
+            )
+        }
+    }
+
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text(text = stringResource(id = R.string.memento), textAlign = TextAlign.Center, color = ColorTheme, fontWeight = FontWeight.Bold, fontFamily = Font.toFontFamily()) },
+            text = {
+                Text(
+                    text = value,
+                    fontSize = 18.sp,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth(),
+                    overflow = TextOverflow.Visible,
+                    softWrap = true,
+                    maxLines = Int.MAX_VALUE,
+                    color = ColorTheme,
+                    fontFamily = Font.toFontFamily()
+                )
+            },
+            containerColor = ButtonColor1,
+            modifier = Modifier.background(
+                color = ButtonColor1,
+                shape = RoundedCornerShape(10.dp)
+            ),
+            confirmButton = {
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = { showDialog = false },
+                    contentPadding = PaddingValues(),
+                    border = BorderStroke(2.dp, ColorTheme),
+                    colors = ButtonDefaults.buttonColors(Color.Transparent),
+                    shape = RoundedCornerShape(10.dp),
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(40.dp)
+                            .background(
+                                brush = Brush.horizontalGradient(
+                                    listOf(
+                                        ButtonColor1,
+                                        ButtonColor2
+                                    )
+                                ),
+                                shape = RoundedCornerShape(10.dp)
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(stringResource(id = R.string.okay), color = ColorTheme,fontFamily = Font.toFontFamily())
+                    }
+                }
+            }
+        )
+    }
+}
 
