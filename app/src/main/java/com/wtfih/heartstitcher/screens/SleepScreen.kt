@@ -156,7 +156,7 @@ fun SleepScreen(dataViewModel: UserDataViewModel = viewModel()) {
             Spacer(modifier = Modifier.weight(1f))
 
             ButtonComponent(value = stringResource(id = string.browse),
-                onButtonClicked = { HeartStitcherRouter.navigateTo(Screen.DreamsScreen) })
+                onButtonClicked = { HeartStitcherRouter.navigateTo(Screen.WakeUpScreen) })
 
             Spacer(modifier = Modifier.weight(1f))
         }

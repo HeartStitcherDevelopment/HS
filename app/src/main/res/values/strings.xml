@@ -172,4 +172,14 @@
     <string name="food_reminder">Food reminder</string>
     <string name="water_reminder">Water reminder</string>
     <string name="unset">Unset notification</string>
+    <string name="opt">Opt</string>
+    <string name="wake_up">Wake up time:</string>
+    <string name="fall_asleep">Fall asleep time:</string>
+    <string name="good_morning">Good Morning!</string>
+    <string name="morning">It\'s good to have you back with us here! Please tell us how was your night and have a wonderful day afterwards!</string>
+    <string name="pleasent_dream">Pleasent Dream</string>
+    <string name="bad_dream">Bad Dream</string>
+    <string name="sleep_issue">Sleep Issue</string>
+    <string name="neutral">Neutral</string>
+    <string name="slept_well">Slept Well</string>
 </resources>

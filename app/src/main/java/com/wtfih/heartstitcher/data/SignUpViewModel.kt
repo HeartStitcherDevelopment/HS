@@ -11,6 +11,7 @@ import com.google.firebase.ktx.Firebase
 import com.wtfih.heartstitcher.data.rules.Validator
 import com.wtfih.heartstitcher.navigation.HeartStitcherRouter
 import com.wtfih.heartstitcher.navigation.Screen
+import java.time.LocalDate
 
 class SignUpViewModel : ViewModel() {
 
@@ -156,6 +157,11 @@ class SignUpViewModel : ViewModel() {
                         "sleep3" to true,
                         "water" to false,
                         "food" to false,
+                        "wake1" to 0,
+                        "wake2" to true,
+                        "asleep1" to 0,
+                        "asleep2" to true,
+                        "dreams" to mutableListOf<Pair<LocalDate,Pair<String,Int>>>()
                     )
                     saveCredentials(context = context!!, email = email, password = password)
                     database.collection("users")

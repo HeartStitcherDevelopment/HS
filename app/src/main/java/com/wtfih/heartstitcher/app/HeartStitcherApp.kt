@@ -32,6 +32,7 @@ import com.wtfih.heartstitcher.screens.HomeScreen
 import com.wtfih.heartstitcher.screens.LoadingScreen
 import com.wtfih.heartstitcher.screens.LoginScreen
 import com.wtfih.heartstitcher.screens.NotepadScreen
+import com.wtfih.heartstitcher.screens.NotificationScreen
 import com.wtfih.heartstitcher.screens.NutritionScreen
 import com.wtfih.heartstitcher.screens.PanicScreen
 import com.wtfih.heartstitcher.screens.PlaceHolderScreen
@@ -40,6 +41,7 @@ import com.wtfih.heartstitcher.screens.SignUpScreen
 import com.wtfih.heartstitcher.screens.SleepScreen
 import com.wtfih.heartstitcher.screens.TaskScreen
 import com.wtfih.heartstitcher.screens.TermsAndConditionsScreen
+import com.wtfih.heartstitcher.screens.WakeUpScreen
 import com.wtfih.heartstitcher.screens.WheelScreen
 import com.wtfih.heartstitcher.ui.theme.Anime1
 import com.wtfih.heartstitcher.ui.theme.Anime2
@@ -388,6 +390,12 @@ fun HeartSitcherApp(themeData: ThemeData = viewModel(), dataViewModel: UserDataV
                 }
                 is Screen.DreamsScreen ->{
                     DreamsScreen()
+                }
+                is Screen.WakeUpScreen ->{
+                    WakeUpScreen()
+                }
+                is Screen.NotificationScreen ->{
+                    NotificationScreen()
                 }
             }
         }

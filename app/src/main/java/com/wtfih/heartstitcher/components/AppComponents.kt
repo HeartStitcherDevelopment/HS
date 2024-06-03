@@ -1012,13 +1012,15 @@ fun TextFieldComponent(
     value: String,
     onValueChange: (String) -> Unit,
     labelValue: String,
-    width: Int = 300
+    width: Int = 300,
+    initialLines: Int = 1, // New parameter for initial number of lines
+    maxLines: Int = Int.MAX_VALUE, // Changed default value to allow for multiline input
 ) {
+    val lineHeight = 20.dp
+    val textFieldHeight = lineHeight * initialLines
     OutlinedTextField(
         value = value,
-        label = { Text(text = labelValue, fontSize = 15.sp,
-            color = ColorTheme,
-            fontFamily = Font.toFontFamily())},
+        label = { Text(text = labelValue, fontSize = 15.sp, color = ColorTheme, fontFamily = Font.toFontFamily()) },
         colors = OutlinedTextFieldDefaults.colors(
             focusedTextColor = ColorTheme,
             unfocusedTextColor = ColorTheme,
@@ -1028,9 +1030,11 @@ fun TextFieldComponent(
             disabledBorderColor = ButtonColor2,
         ),
         onValueChange = onValueChange,
-        modifier = Modifier.width(width.dp),
+        modifier = Modifier
+            .width(width.dp)
+            .height(textFieldHeight), // Set the height based on initial number of lines
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text, imeAction = ImeAction.Done),
-        maxLines = 1,
+        maxLines = maxLines,
         shape = RoundedCornerShape(10.dp)
     )
 }
