@@ -30,6 +30,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.wtfih.heartstitcher.R
+import com.wtfih.heartstitcher.components.ButtonComponent
 import com.wtfih.heartstitcher.components.HeadingTextComponent
 import com.wtfih.heartstitcher.components.SettingsIconComponent
 import com.wtfih.heartstitcher.components.ThemeIcon
@@ -316,26 +317,9 @@ fun SettingsScreen(themeData: ThemeData = viewModel()) {
                 )
             }
             Spacer(modifier = Modifier.height(30.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(text = "Contacts",
-                    modifier = Modifier.padding(8.dp),
-                    fontSize = 25.sp,
-                    color = color.value,
-                    fontFamily = font.value.toFontFamily()
-                )
 
-                Spacer(modifier = Modifier.width(5.dp))
-                Divider(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f),
-                    color = color.value,
-                    thickness = 3.dp
-                )
-            }
+            ButtonComponent(value = "testing", onButtonClicked = { HeartStitcherRouter.navigateTo(Screen.WakeUpScreen)})
+            ButtonComponent(value = "testing", onButtonClicked = { HeartStitcherRouter.navigateTo(Screen.NotificationScreen)})
         }
         SystemBackButtonHandler {
             HeartStitcherRouter.navigateTo(Screen.HomeScreen)

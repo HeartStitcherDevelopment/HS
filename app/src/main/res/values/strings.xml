@@ -182,4 +182,8 @@
     <string name="sleep_issue">Sleep Issue</string>
     <string name="neutral">Neutral</string>
     <string name="slept_well">Slept Well</string>
+    <string name="notepad_info">Anytime something\'s on your mind, come here and let us know. It is really important to monitor your process of thinking.</string>
+    <string name="new_note">Create new note</string>
+    <string name="title">Title</string>
+    <string name="notes">Notes</string>
 </resources>

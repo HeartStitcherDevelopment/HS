@@ -25,6 +25,8 @@ sealed class Screen {
     object DreamsScreen : Screen()
     object WakeUpScreen : Screen()
     object NotificationScreen : Screen()
+    object BrowseNotesScreen : Screen()
+    object BrowseDreamsScreen : Screen()
 }
 
 object HeartStitcherRouter {

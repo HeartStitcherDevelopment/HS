@@ -38,12 +38,13 @@ import java.time.LocalDate
 
 @Composable
 fun WakeUpScreen(dataViewModel: UserDataViewModel = viewModel()) {
-    val dreams = remember { dataViewModel.state.value["dreams"] as? MutableList<Pair<LocalDate,Pair<String,Int>>> ?: mutableListOf() }
+    val dreams = remember { dataViewModel.state.value["dreams"] as? MutableList<Pair<String,Pair<String,Int>>> ?: mutableListOf() }
     var textValue by remember { mutableStateOf("") }
     var type by remember { mutableStateOf(1) }
     val db = Firebase.firestore
     val id = Firebase.auth.currentUser!!.uid
-    val currentDate = remember { LocalDate.now() }
+    val date = remember { LocalDate.now() }
+    val dateString = "${date.year}-${date.monthValue.toString().padStart(2, '0')}-${date.dayOfMonth.toString().padStart(2, '0')}"
     val context = LocalContext.current
     Box(
         modifier = Modifier
@@ -102,7 +103,7 @@ fun WakeUpScreen(dataViewModel: UserDataViewModel = viewModel()) {
 
             ButtonComponent(value = stringResource(id = R.string.finish),
                 onButtonClicked = {
-                    dreams.add(Pair(currentDate, Pair(textValue, type)))
+                    dreams.add(Pair(dateString, Pair(textValue, type)))
                     db.collection("users").document(id).update("dreams", dreams)
                     Toast.makeText(
                         context,

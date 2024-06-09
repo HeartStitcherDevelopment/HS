@@ -103,6 +103,7 @@ import com.wtfih.heartstitcher.data.Globals.Font
 import com.wtfih.heartstitcher.navigation.HeartStitcherRouter
 import com.wtfih.heartstitcher.navigation.Screen
 import com.wtfih.heartstitcher.ui.theme.BGColor
+import com.wtfih.heartstitcher.ui.theme.Chill1
 import com.wtfih.heartstitcher.ui.theme.PanicColor1
 import com.wtfih.heartstitcher.ui.theme.Primary
 import com.wtfih.heartstitcher.ui.theme.Secondary
@@ -1032,7 +1033,7 @@ fun TextFieldComponent(
         onValueChange = onValueChange,
         modifier = Modifier
             .width(width.dp)
-            .height(textFieldHeight), // Set the height based on initial number of lines
+            .height(textFieldHeight),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text, imeAction = ImeAction.Done),
         maxLines = maxLines,
         shape = RoundedCornerShape(10.dp)
@@ -1463,3 +1464,309 @@ fun AchievementComponent(
     }
 }
 
+@Composable
+fun NoteComponent(
+    title: String,
+    text: String,
+    date: String,
+    isEnabled: Boolean = true,
+) {
+    var showDialog by remember { mutableStateOf(false) }
+    Box(
+        modifier = Modifier
+            .width(150.dp)
+            .height(150.dp)
+            .padding(0.dp)
+            .border(
+                width = 3.dp,
+                color = ColorTheme,
+                shape = RoundedCornerShape(10.dp)
+            )
+            .background(
+                brush = Brush.horizontalGradient(listOf(ButtonColor1, ButtonColor2)),
+                shape = RoundedCornerShape(10.dp)
+            )
+            .clickable(enabled = isEnabled) { showDialog = true },// Make only this Box clickable,
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = if (title.length > 80) {
+                    "${title.take(80)}..."
+                } else {
+                    title
+                },
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+                color = ColorTheme,
+                fontFamily = Font.toFontFamily(),
+                modifier = Modifier.width(130.dp)
+            )
+        }
+    }
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = {
+                Text(
+                    text = title,
+                    textAlign = TextAlign.Center,
+                    color = ColorTheme,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = Font.toFontFamily()
+                )
+            },
+            text = {
+                Column {
+                    Text(
+                        text = text,
+                        fontSize = 20.sp,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .widthIn(40.dp)
+                            .padding(end = 8.dp),
+                        overflow = TextOverflow.Visible,
+                        softWrap = true,
+                        maxLines = Int.MAX_VALUE,
+                        color = ColorTheme,
+                        fontFamily = Font.toFontFamily()
+                    )
+                    Spacer(modifier = Modifier.height(8.dp)) // Add some space between text and date
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.CenterEnd
+                    ) {
+                        Text(
+                            text = date,
+                            fontSize = 16.sp, // Adjust the font size if needed
+                            color = ColorTheme,
+                            fontFamily = Font.toFontFamily()
+                        )
+                    }
+                }
+            },
+            containerColor = ButtonColor1,
+            modifier = Modifier.background(
+                color = ButtonColor1,
+                shape = RoundedCornerShape(10.dp)
+            ),
+            confirmButton = {
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = { showDialog = false },
+                    contentPadding = PaddingValues(),
+                    border = BorderStroke(2.dp, ColorTheme),
+                    colors = ButtonDefaults.buttonColors(Color.Transparent),
+                    shape = RoundedCornerShape(10.dp),
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(40.dp)
+                            .background(
+                                brush = Brush.horizontalGradient(
+                                    listOf(
+                                        ButtonColor1,
+                                        ButtonColor2
+                                    )
+                                ),
+                                shape = RoundedCornerShape(10.dp)
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(stringResource(id = R.string.okay), color = ColorTheme, fontFamily = Font.toFontFamily())
+                    }
+                }
+            }
+        )
+    }
+}
+
+@SuppressLint("SuspiciousIndentation")
+@Composable
+fun Notepad(notes: List<Pair<String, Pair<String, String>>>) {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(30.dp)
+    ) {
+        items(notes.chunked(2)) { chunk ->
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(30.dp)
+            ) {
+                chunk.forEach { item ->
+                    NoteComponent(
+                        title = item.second.first,
+                        text = item.second.second,
+                        date = item.first,
+                        isEnabled = true
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+        }
+    }
+}
+
+@Composable
+fun DreamComponent(
+    text: String,
+    date: String,
+    type: Int,
+    isEnabled: Boolean = true,
+) {
+    var showDialog by remember { mutableStateOf(false) }
+    Box(
+        modifier = Modifier
+            .width(150.dp)
+            .height(150.dp)
+            .padding(0.dp)
+            .border(
+                width = 3.dp,
+                color = if(type == 1) Color.Blue
+                        else if(type == 2)  Color.White
+                        else if(type == 3) Color.Red
+                        else if(type == 4) Chill1
+                        else Color.Yellow,
+                shape = RoundedCornerShape(10.dp)
+            )
+            .background(
+                brush = Brush.horizontalGradient(listOf(ButtonColor1, ButtonColor2)),
+                shape = RoundedCornerShape(10.dp)
+            )
+            .clickable(enabled = isEnabled) { showDialog = true },// Make only this Box clickable,
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = if (text.length > 80) {
+                    "${text.take(80)}..."
+                } else {
+                    text
+                },
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+                color = ColorTheme,
+                fontFamily = Font.toFontFamily(),
+                modifier = Modifier.width(130.dp)
+            )
+        }
+    }
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = {
+                Text(
+                    text =
+                        if(type == 1) stringResource(id = R.string.pleasent_dream)
+                        else if(type == 2) stringResource(id = R.string.neutral)
+                        else if(type == 3)stringResource(id = R.string.bad_dream)
+                        else if(type == 4)stringResource(id = R.string.slept_well)
+                        else stringResource(id = R.string.sleep_issue),
+                    textAlign = TextAlign.Center,
+                    color = ColorTheme,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = Font.toFontFamily()
+                )
+            },
+            text = {
+                Column {
+                    Text(
+                        text = text,
+                        fontSize = 20.sp,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .widthIn(40.dp)
+                            .padding(end = 8.dp),
+                        overflow = TextOverflow.Visible,
+                        softWrap = true,
+                        maxLines = Int.MAX_VALUE,
+                        color = ColorTheme,
+                        fontFamily = Font.toFontFamily()
+                    )
+                    Spacer(modifier = Modifier.height(8.dp)) // Add some space between text and date
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.CenterEnd
+                    ) {
+                        Text(
+                            text = date,
+                            fontSize = 16.sp, // Adjust the font size if needed
+                            color = ColorTheme,
+                            fontFamily = Font.toFontFamily()
+                        )
+                    }
+                }
+            },
+            containerColor = ButtonColor1,
+            modifier = Modifier.background(
+                color = ButtonColor1,
+                shape = RoundedCornerShape(10.dp)
+            ),
+            confirmButton = {
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = { showDialog = false },
+                    contentPadding = PaddingValues(),
+                    border = BorderStroke(2.dp, ColorTheme),
+                    colors = ButtonDefaults.buttonColors(Color.Transparent),
+                    shape = RoundedCornerShape(10.dp),
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(40.dp)
+                            .background(
+                                brush = Brush.horizontalGradient(
+                                    listOf(
+                                        ButtonColor1,
+                                        ButtonColor2
+                                    )
+                                ),
+                                shape = RoundedCornerShape(10.dp)
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(stringResource(id = R.string.okay), color = ColorTheme, fontFamily = Font.toFontFamily())
+                    }
+                }
+            }
+        )
+    }
+}
+
+@SuppressLint("SuspiciousIndentation")
+@Composable
+fun Dreams(dreams: List<Pair<String,Pair<String,Int>>>) {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(30.dp)
+    ) {
+        items(dreams.chunked(2)) { chunk ->
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(30.dp)
+            ) {
+                chunk.forEach { item ->
+                    DreamComponent(
+                        text = item.second.first,
+                        date = item.first,
+                        type = item.second.second,
+                        isEnabled = true
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+        }
+    }
+}

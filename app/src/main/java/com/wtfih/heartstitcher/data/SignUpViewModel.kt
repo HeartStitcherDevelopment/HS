@@ -161,7 +161,8 @@ class SignUpViewModel : ViewModel() {
                         "wake2" to true,
                         "asleep1" to 0,
                         "asleep2" to true,
-                        "dreams" to mutableListOf<Pair<LocalDate,Pair<String,Int>>>()
+                        "dreams" to mutableListOf<Pair<LocalDate,Pair<String,Int>>>(),
+                        "notes" to mutableListOf<Pair<LocalDate,Pair<String,String>>>()
                     )
                     saveCredentials(context = context!!, email = email, password = password)
                     database.collection("users")
