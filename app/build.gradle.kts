@@ -71,6 +71,7 @@ dependencies {
     implementation("com.google.firebase:firebase-storage")
     implementation("io.coil-kt:coil-compose:2.0.0")
     implementation("com.google.accompanist:accompanist-permissions:0.29.0-alpha")
+    implementation("androidx.work:work-runtime-ktx:2.7.1")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

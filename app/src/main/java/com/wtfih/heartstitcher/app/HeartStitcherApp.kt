@@ -1,5 +1,8 @@
 package com.wtfih.heartstitcher.app
 
+import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,6 +19,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.wtfih.heartstitcher.R
 import com.wtfih.heartstitcher.components.MusicPlayer
+import com.wtfih.heartstitcher.data.CheckAndRunAction
 import com.wtfih.heartstitcher.data.Globals.ButtonColor1
 import com.wtfih.heartstitcher.data.Globals.ButtonColor2
 import com.wtfih.heartstitcher.data.Globals.ColorTheme
@@ -81,12 +85,18 @@ import com.wtfih.heartstitcher.ui.theme.SolitudeTheme
 import com.wtfih.heartstitcher.ui.theme.Space1
 import com.wtfih.heartstitcher.ui.theme.Space2
 import com.wtfih.heartstitcher.ui.theme.SpaceTheme
+import java.time.LocalTime
 
+@SuppressLint("CoroutineCreationDuringComposition")
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun HeartSitcherApp(themeData: ThemeData = viewModel(), dataViewModel: UserDataViewModel = viewModel()){
     val login by remember { derivedStateOf { themeData.login} }
     Surface(modifier = Modifier.fillMaxSize())
-    {
+    {   var flager: Int = 0
+        val flagerr = remember { derivedStateOf {flager} }
+        val currentTime = remember { derivedStateOf {LocalTime.now()} }
+        CheckAndRunAction(hour = 11, min = 35, isAm = false, flag = true, currentTime.value, flager = flagerr.value)
         if(login.value) {
             dataViewModel.refresh()
             var flag = remember { mutableStateOf(true) }
